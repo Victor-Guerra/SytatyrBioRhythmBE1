@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
 from django.http import Http404
+<<<<<<< HEAD
 from django.views import View
 
 from . import brcalc
@@ -13,6 +14,8 @@ def index(request, user_id=0):
         'user_id': user_id,
     }
     return HttpResponse(template.render(context, request))
+=======
+>>>>>>> b844019 (Add base template for frontend pages.)
 
 
 def loginView(request):
