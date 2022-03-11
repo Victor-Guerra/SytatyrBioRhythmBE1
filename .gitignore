@@ -1,3 +1,6 @@
 db.sqlite3 
 *.pyc
 *.pyo
+sytatyrbiorhythm/__pycache__/
+api/__pycache__/
+frontend/__pycache__/
