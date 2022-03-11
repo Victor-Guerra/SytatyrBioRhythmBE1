@@ -14,6 +14,7 @@ def index(request, user_id=0):
     }
     return HttpResponse(template.render(context, request))
 
+
 def loginView(request):
     display_forecast = False
     template = loader.get_template('api/index.html')
