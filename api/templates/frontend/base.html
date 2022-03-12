@@ -13,7 +13,7 @@
         
         .left-panel {
             background-color: #414288 !important;
-            margin-right: 5%; !important;
+            margin-right: 5% !important;
         }
         
         .content-panel {
@@ -38,7 +38,7 @@
         .logout {
           right: 0 !important;
         }
-        {% block styles %} {% endblock %}
+       {% block styles %} {% endblock %}
     </style>
     <meta charset="utf-8">
     <title>{% block title %}Home{% endblock %}</title>
@@ -46,6 +46,7 @@
   </head>
   <body>
         <div>
+          {% block navbar %}
             <nav class="navbar fixed-top navbar-expand-lg navbar-light main-color-bg">
                 <div class="container-fluid row">
                   <a class="navbar-brand accent-color-text col-1" href="#">BRS</a>
@@ -70,11 +71,13 @@
                     </div>
                 </div>
               </nav>
+              {% endblock %}
         </div>
         <br>
         <br>
         <br>
         <div class="container-fluid">
+          {% block page-content %}
             <div class="row gx-10">
                 <div class="left-panel container col-3" style="margin-left: 2rem !important;">
                   {% block left-panel %}
@@ -85,9 +88,11 @@
                   {% endblock %}
                 </div>
             </div>
+            {% endblock %}
           </div>
             <br>
         <div class="footer container-fluid">
+          {% block footer %}
             <div class="row">
                 <div class="container-fluid col-12 main-color-bg accent-color-text ">
                     <p>
@@ -99,6 +104,7 @@
                     </p>
                 </div>
             </div>
+            {% endblock %}
         </div>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>

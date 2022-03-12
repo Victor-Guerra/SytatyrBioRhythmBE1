@@ -1,15 +1,103 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>My test page</title>
-  </head>
-  <body>
-        {% if display_forecast %} 
-            <h1>Buenas</h1>
-        {% else %}
-            <h1>Malas</h1>
-        {% endif %}
-    <p>This is my page</p>
-  </body>
-</html>
+{% extends "frontend/base.html" %}
+
+{% block styles %}
+
+.loginTitle {
+font-size: 300% !important;
+font-family: Tahoma !important;
+font-weight: bold !important;
+}
+
+.text-center{
+padding: 1% !important;
+}
+
+.form-control{
+border-top: none !important;
+border-left: none !important;
+border-right: none !important;
+}
+.mx-auto{
+padding: 1.5rem !important;
+width: 20rem !important;
+}
+
+.btn{
+color: white !important;
+font-family : Tahoma !important;
+border-radius: 20vw !important;
+font-size: 145% !important;
+width: 14rem !important;
+padding: 10px 20px !important;
+font-weight: bold !important;
+display:block !important;
+margin: 0 auto !important;
+background-image: linear-gradient(to right, #682D63 0%,#414288 51%, #682D63 100%);
+
+}
+
+.loginfooter{
+bottom: 0 !important;
+position: fixed !important;
+min-height: 22vh !important;
+}
+.login-footer-row{
+padding-top: 2rem !important;
+}
+
+.btndiv{
+margin-top: 1.5rem !important;
+}
+
+.color-font-footer{
+  padding-right: 2rem !important;
+  color: white !important;
+  font-size: 1.4rem !important;
+}
+
+.color-link-footer{
+  color: #DEEFB7 !important;
+}
+{% endblock %}
+
+{% block page-content %}
+<blockquote class="text-center">
+  <h3 class="loginTitle">Biorhythm Sitatyr</h3>
+</blockquote>
+
+<div class="text-center">
+  <img class="rounded-circle z-depth-2" alt="Responsive image" width="230 vh" height="230 vw"
+    src="https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png">
+</div>
+
+<div class="mx-auto">
+  <input type="text" class="form-control shadow-none" placeholder="Username" aria-label="Username">
+</div>
+
+<div class="mx-auto">
+  <input type="text" class="form-control shadow-none" placeholder="Password" aria-label="Password">
+</div>
+
+<div class="btndiv">
+  <button type="button" class="btn">Login</button>
+</div>
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block footer %}
+<div class="row login-footer-row">
+  <div class="container-fluid col-12 main-color-bg loginfooter">
+    <p class="text-center color-font-footer">Don't have an account yet? <a href="#" class="link-primary color-link-footer" onclick="SignUpPage()">Sign-Up</a></p>
+  </div>
+</div>
+
+<script>
+  function SignUpPage()
+  {
+       location.href = "/signup";
+  } 
+  </script>
+
+{% endblock %}
