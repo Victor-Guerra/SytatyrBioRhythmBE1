@@ -1,0 +1,86 @@
+{% extends "frontend/base.html" %}
+{% block title %}My Biorhythm{% endblock %}
+
+{% block styles %}
+.user-img {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.panel-alignment {
+  padding-left: 12.5% !important;
+}
+
+.panel-label {
+  font-size: 1.5rem;
+}
+
+.edit-profile-button {
+  background-color: #5fb59c !important;
+  border: none !important;
+}
+
+.calculation-button {
+  background-color: #414288 !important;
+  border: none !important;
+  height: 100% !important;
+  width: 50% !important;
+}
+
+.button-row {
+  height: 8rem !important;
+}
+
+.title-pad {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+{% endblock %}
+
+{% block left-panel %}
+<div class="container row panel-alignment">
+    <div class="container col-12 user-img">
+        <img src="https://dummyimage.com/500x500/000/0011ff" class="img-fluid rounded-circle" alt="user profile picture" style="padding-bottom: 1rem;">
+        <span>
+        <h1 class="display-6 bold text-center accent-color-text"><strong>Username</strong></h1>
+        </span>
+    </div>
+    <div class="container col-12 text-center accent-color-text">
+        <p class="leading panel-label">Birthdate:</p>
+        <h1 class="display-6">06-10-2000</h1>
+    </div>
+    <div class="container col-12 text-center accent-color-text">
+        <p class="leading panel-label">Today is:</p>
+        <h1 class="display-6">06-10-2022</h1>
+    </div>
+    <div class="d-grid gap-2 mx-auto col-12 text-center accent-color-text" style="padding-top: 2rem; padding-bottom: 2rem;">
+      <button type="button" class="btn btn-primary btn-lg accent-color-text edit-profile-button">Edit Profile</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block content-panel %}
+<div class="container-lg">
+    <div class="row">
+      <div class="container-fluid col-12 text-center title-pad">
+        <h1 class="display-4"><strong>Calculate:</strong></h1>
+      </div>
+    </div>
+    <div class="row button-row">
+      <div class="container-fluid col-12 text-center">
+      <button type="button" class="btn btn-primary btn-lg accent-color-text calculation-button">Today's Biorhythm</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="container-fluid col-12 text-center title-pad">
+        <p class="leading"><strong>OR</strong></p>
+      </div>
+    </div>
+    <div class="row button-row">
+      <div class="container-fluid col-12 text-center">
+      <button type="button" class="btn btn-primary btn-lg accent-color-text calculation-button">10 Day Forecast</button>
+      </div>
+    </div>
+</div>
+{% endblock %}
