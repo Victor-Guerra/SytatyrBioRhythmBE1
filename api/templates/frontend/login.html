@@ -93,20 +93,22 @@ min-height: 22vh !important;
   </div>
 </div>
 
-<script>
 
-function myFunction() {
+<script>
+  function SignUpPage()
+  {
+       location.href = "/signup";
+  } 
+  
+  function myFunction() {
     var x = document.getElementById("myInput");
     if (x.type === "password") {
     x.type = "text";
     } else {
     x.type = "password";
   }
-  function SignUpPage()
-  {
-       location.href = "/signup";
-  } 
 }
+
   </script>
 
 {% endblock %}
