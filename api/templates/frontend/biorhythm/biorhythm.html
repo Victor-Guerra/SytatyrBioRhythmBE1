@@ -3,84 +3,137 @@
 
 {% block styles %}
 .user-img {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+padding-top: 1rem;
+padding-bottom: 1rem;
 }
 
 .panel-alignment {
-  padding-left: 12.5% !important;
+padding-left: 12.5% !important;
 }
 
 .panel-label {
-  font-size: 1.5rem;
+font-size: 1.5rem;
 }
 
 .edit-profile-button {
-  background-color: #5fb59c !important;
-  border: none !important;
+background-color: #5fb59c !important;
+border: none !important;
 }
 
 .calculation-button {
-  background-color: #414288 !important;
-  border: none !important;
-  height: 100% !important;
-  width: 50% !important;
+background-color: #414288 !important;
+border: none !important;
+height: 100% !important;
+width: 50% !important;
 }
 
 .button-row {
-  height: 8rem !important;
+height: 8rem !important;
 }
 
 .title-pad {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+padding-top: 2rem;
+padding-bottom: 2rem;
+}
+
+.save-profile-details {
+background-color: #5fb59c !important;
+border-color: #ffffff !important;
+}
+
+.cancel-profile-details {
+background-color: #682d63 !important;
+border-color: #ffffff !important;
+}
+
+.profile-picture {
+max-heigth: 5rem !important;
+max-width: 10rem !important;
+border-radius: 50% !important;
+align-content: center;
 }
 
 {% endblock %}
 
 {% block left-panel %}
 <div class="container row panel-alignment">
-    <div class="container col-12 user-img">
-        <img src="https://dummyimage.com/500x500/000/0011ff" class="img-fluid rounded-circle" alt="user profile picture" style="padding-bottom: 1rem;">
-        <span>
-        <h1 class="display-6 bold text-center accent-color-text"><strong>Username</strong></h1>
-        </span>
-    </div>
-    <div class="container col-12 text-center accent-color-text">
-        <p class="leading panel-label">Birthdate:</p>
-        <h1 class="display-6">06-10-2000</h1>
-    </div>
-    <div class="container col-12 text-center accent-color-text">
-        <p class="leading panel-label">Today is:</p>
-        <h1 class="display-6">06-10-2022</h1>
-    </div>
-    <div class="d-grid gap-2 mx-auto col-12 text-center accent-color-text" style="padding-top: 2rem; padding-bottom: 2rem;">
-      <button type="button" class="btn btn-primary btn-lg accent-color-text edit-profile-button">Edit Profile</button>
-    </div>
+  <div class="container col-12 user-img">
+    <img src="https://dummyimage.com/500x500/000/0011ff" class="img-fluid rounded-circle" alt="user profile picture"
+      style="padding-bottom: 1rem;">
+    <span>
+      <h1 class="display-6 bold text-center accent-color-text"><strong>Username</strong></h1>
+    </span>
+  </div>
+  <div class="container col-12 text-center accent-color-text">
+    <p class="leading panel-label">Birthdate:</p>
+    <h1 class="display-6">06-10-2000</h1>
+  </div>
+  <div class="container col-12 text-center accent-color-text">
+    <p class="leading panel-label">Today is:</p>
+    <h1 class="display-6">06-10-2022</h1>
+  </div>
+  <div class="d-grid gap-2 mx-auto col-12 text-center accent-color-text"
+    style="padding-top: 2rem; padding-bottom: 2rem;">
+    <button type="button" class="btn btn-primary btn-lg accent-color-text edit-profile-button" data-bs-toggle="modal"
+      data-bs-target="#editUserDetails">Edit Profile</button>
+  </div>
 </div>
 {% endblock %}
 
 {% block content-panel %}
 <div class="container-lg">
-    <div class="row">
-      <div class="container-fluid col-12 text-center title-pad">
-        <h1 class="display-4"><strong>Calculate:</strong></h1>
-      </div>
+  <div class="row">
+    <div class="container-fluid col-12 text-center title-pad">
+      <h1 class="display-4"><strong>Calculate:</strong></h1>
     </div>
-    <div class="row button-row">
-      <div class="container-fluid col-12 text-center">
-      <button type="button" class="btn btn-primary btn-lg accent-color-text calculation-button">Today's Biorhythm</button>
-      </div>
+  </div>
+  <div class="row button-row">
+    <div class="container-fluid col-12 text-center">
+      <button type="button" class="btn btn-primary btn-lg accent-color-text calculation-button">Today's
+        Biorhythm</button>
     </div>
-    <div class="row">
-      <div class="container-fluid col-12 text-center title-pad">
-        <p class="leading"><strong>OR</strong></p>
-      </div>
+  </div>
+  <div class="row">
+    <div class="container-fluid col-12 text-center title-pad">
+      <p class="leading"><strong>OR</strong></p>
     </div>
-    <div class="row button-row">
-      <div class="container-fluid col-12 text-center">
+  </div>
+  <div class="row button-row">
+    <div class="container-fluid col-12 text-center">
       <button type="button" class="btn btn-primary btn-lg accent-color-text calculation-button">10 Day Forecast</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editUserDetails" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="frame" src="" class="rounded-circle z-depth-2 profile-picture img-thumbnail" />
+        <input class="form-control" type="file" id="formFile" onchange="loadImage()">
+        <script>
+          function loadImage() {
+            frame.src = URL.createObjectURL(event.target.files[0]);
+          }
+        </script>
+      </div>
+
+      <div class="container overflow-hidden">
+        <div class="row gy-5 text-center">
+          <div class="col-6 ">
+            <button type="button" class="btn btn-secondary cancel-profile-details"
+              data-bs-dismiss="modal">Cancel</button>
+          </div>
+          <div class="col-6">
+            <button type="button" class="btn btn-primary save-profile-details">Save</button>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
 </div>
 {% endblock %}
+
