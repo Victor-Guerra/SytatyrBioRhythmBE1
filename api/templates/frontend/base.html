@@ -75,6 +75,7 @@
         <br>
         <br>
         <div class="container-fluid">
+          {% block page-content %}
             <div class="row gx-10">
                 <div class="left-panel container col-3" style="margin-left: 2rem !important;">
                   {% block left-panel %}
@@ -85,6 +86,7 @@
                   {% endblock %}
                 </div>
             </div>
+          {% endblock %}
           </div>
             <br>
         <div class="footer container-fluid">

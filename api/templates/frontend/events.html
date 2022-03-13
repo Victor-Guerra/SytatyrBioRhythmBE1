@@ -1,0 +1,84 @@
+{% extends "frontend/base.html" %}
+{% load bootstrap_icons %}
+{% block title %} Events {% endblock %}
+{% block styles %}
+.left-panel {
+    background-color: #FFFFFF!important;
+}
+.content-panel {
+    background-color: #98DFAF !important;
+}
+{% endblock %}
+{% block page-content %}
+<div class="row gx-10">
+    <div class="container col-md-1 gap-2" style="margin-left: 2rem !important;">
+        <button type="button" class="btn btn-primary btn-lg">Add event</button>
+    </div>
+    <div class="container col-10 content-panel  min-vh-100 max-vh-70" style="padding: 2rem !important">
+        <div class="list-group">
+
+            {% for event in enum_events %}
+            <a href="#" class="list-group-item list-group-item-action">
+                <div class="container d-flex w-100 justify-content-between">
+                    <div class="col-4" data-bs-toggle="modal" data-bs-target="#eventModal{{event.0}}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h1 class="mb-1" style="padding: 5% !important">{{event.1.date}}</h1>
+                        </div>
+                    </div>
+                    <div class="col-7" data-bs-toggle="modal" data-bs-target="#eventModal{{event.0}}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h2 class="mb-1" style="padding: 5% !important">{{event.1.title}}</h2>
+                        </div>
+                    </div>
+                    <div class="container col-1">
+                        <div class="d-flex w-100 justify-content-between">
+                            <small class="text-muted">{% bs_icon 'trash' %}</small>
+                        </div>
+                        <p></p>
+                        <div class="d-flex w-100 justify-content-between">
+                            <small class="text-muted">{% bs_icon 'pencil-square' %}</small>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <div class="modal fade" id="eventModal{{event.0}}" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eventModalLabel">Event details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-4">Date: </div>
+                                    <div class="col-md-8 ms-auto">{{event.1.date}}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">Title: </div>
+                                    <div class="col-md-8 ms-auto">{{event.1.title}}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">Description: </div>
+                                    <div class="col-md-8 ms-auto">{{event.1.description}}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">Participants: </div>
+                                    <div class="col-md-8 ms-auto">{{event.1.participants |safeseq|join:", " }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-warning">Modify</button>
+                            <button type="button" class="btn btn-danger">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
