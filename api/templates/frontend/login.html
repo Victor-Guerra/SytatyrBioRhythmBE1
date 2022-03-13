@@ -37,28 +37,27 @@ background-image: linear-gradient(to right, #682D63 0%,#414288 51%, #682D63 100%
 }
 
 .loginfooter{
-bottom: 0 !important;
-position: fixed !important;
+bottom: 10rem !important;
 min-height: 22vh !important;
-}
-.login-footer-row{
-padding-top: 2rem !important;
-}
-
-.btndiv{
-margin-top: 1.5rem !important;
 }
 
 .color-font-footer{
   padding-right: 2rem !important;
   color: white !important;
   font-size: 1.4rem !important;
+  padding-top: -5rem !important;
 }
 
 .color-link-footer{
   color: #DEEFB7 !important;
 }
+
+.btndiv{
+  margin-top: 1.5rem !important;
+  }
+  
 {% endblock %}
+
 
 {% block page-content %}
 <blockquote class="text-center">
@@ -75,7 +74,8 @@ margin-top: 1.5rem !important;
 </div>
 
 <div class="mx-auto">
-  <input type="text" class="form-control shadow-none" placeholder="Password" aria-label="Password">
+  <input type="password" class="form-control shadow-none" placeholder="Password" id="myInput">
+  <input type="checkbox" onclick="myFunction()">  Show Password
 </div>
 
 <div class="btndiv">
@@ -94,10 +94,19 @@ margin-top: 1.5rem !important;
 </div>
 
 <script>
+
+function myFunction() {
+    var x = document.getElementById("myInput");
+    if (x.type === "password") {
+    x.type = "text";
+    } else {
+    x.type = "password";
+  }
   function SignUpPage()
   {
        location.href = "/signup";
   } 
+}
   </script>
 
 {% endblock %}
