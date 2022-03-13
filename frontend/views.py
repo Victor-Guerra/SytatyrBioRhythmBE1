@@ -9,9 +9,29 @@ def index(request, user_id=0):
         'user_id': user_id,
     }
     return HttpResponse(template.render(context, request))
+from .firebase.firebase import init_firebase
+from .firebase.firebase import create_user
+from .firebase.firebase import get_user
+
+
+init_firebase()
+get_user()
+# user = {
+#     "username": "EL kiko",
+#     "email": "kike@tristin.com"
+# }
+# create_user(user)
+create_user()
+
 
 def loginView(request):
-    pass
+    display_forecast = False
+    template = loader.get_template('api/index.html')
+    context = {
+        'display_forecast': display_forecast,
+    }
+    return HttpResponse(template.render(context, request))
+
 
 def signupView(request):
     pass
