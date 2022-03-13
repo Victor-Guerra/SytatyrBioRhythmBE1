@@ -16,8 +16,10 @@ def init_firebase():
         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-o6bcg%40biorhythmsytatyr.iam.gserviceaccount.com"
     })
-    firebase_admin.initialize_app(cred)
-
+    try:
+        firebase_admin.initialize_app(cred)
+    except(ValueError):
+        pass
 
 # def create_user(user):
 #     db = firestore.client()
@@ -36,6 +38,11 @@ def get_user():
 
     for usr in users:
         print(f'{usr.id} => {usr.to_dict()}')
+
+# def update_user(updated_fields):
+#     db = firestore.client()
+#     user_refget_user()
+    
 
 # def get_user_events():
 #     db = firestore.client()
