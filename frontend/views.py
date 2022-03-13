@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.http import Http404
 
 
+
 def loginView(request):
     display_forecast = False
     template = loader.get_template('frontend/login.html')
@@ -15,7 +16,7 @@ def loginView(request):
 
 def signupView(request):
     display_forecast = False
-    template = loader.get_template('frontend/base.html')
+    template = loader.get_template('frontend/signup.html')
     context = {
         'display_forecast': display_forecast,
     }
