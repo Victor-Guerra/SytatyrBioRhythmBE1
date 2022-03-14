@@ -53,7 +53,7 @@
 {% block left-panel %}
   <div class="container row panel-alignment">
       <div class="container col-12 user-img">
-          <img src="https://dummyimage.com/500x500/000/0011ff" class="img-fluid rounded-circle" alt="user profile picture" style="padding-bottom: 1rem;">
+          <img src="{{ user_img }}" class="img-fluid rounded-circle mx-auto d-block" alt="user profile picture" style="padding-bottom: 1rem;">
           <span>
           <h1 class="display-6 bold text-center accent-color-text"><strong>Username</strong></h1>
           </span>
@@ -64,7 +64,7 @@
       </div>
       <div class="container col-12 text-center accent-color-text">
           <p class="leading panel-label">Today is:</p>
-          <h1 class="display-6">06-10-2022</h1>
+          <h1 class="display-6">{{ today_date }}</h1>
       </div>
       <div class="d-grid gap-2 mx-auto col-12 text-center accent-color-text" style="padding-top: 2rem; padding-bottom: 2rem;">
         <button type="button" class="btn btn-primary btn-lg accent-color-text edit-profile-button">Edit Profile</button>

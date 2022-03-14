@@ -1,30 +1,32 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt, mpld3
 import numpy as np
+from datetime import datetime
 
 def calcBR(birthday, date):
     fig, ax = plt.subplots()
     x = date #date
     k = birthday # birthdate
     
+    phase = int((x - k).days)
 
-    t = np.arange(x-1, x+1, 0.1)
+    t = np.arange(phase-1, phase+1, 0.1)
 
-    green_br = np.sin((np.pi*t)/16.5 + (k*np.pi))
-    green_br_dot = np.sin((np.pi*x)/16.5 + (k*np.pi))
+    green_br = np.sin((np.pi*2*t)/16.5)
+    green_br_dot = np.sin((np.pi*2*phase)/16.5)
 
-    red_br = np.sin((np.pi*t)/14 + (k*np.pi))
-    red_br_dot = np.sin((np.pi*x)/14 + (k*np.pi))
+    red_br = np.sin((np.pi*2*t)/14)
+    red_br_dot = np.sin((np.pi*2*phase)/14)
 
-    blue_br = np.sin((np.pi*t)/11.5 + (k*np.pi))
-    blue_br_dot = np.sin((np.pi*x)/11.5 + (k*np.pi))
+    blue_br = np.sin((np.pi*2*t)/11.5)
+    blue_br_dot = np.sin((np.pi*2*phase)/11.5)
 
     line, = ax.plot(t, green_br, 'g', label=f"Intellectual: {round(green_br_dot,4)*100}%")
-    today1, = ax.plot(x, green_br_dot, 'go')
+    today1, = ax.plot(phase, green_br_dot, 'go')
     line2, = ax.plot(t, red_br, 'r', label=f"Emotional: {round(red_br_dot,4)*100}%")
-    today2, = ax.plot(x, red_br_dot, 'ro')
+    today2, = ax.plot(phase, red_br_dot, 'ro')
     line3, = ax.plot(t, blue_br, 'b', label=f"Physical: {round(blue_br_dot,4)*100}%")
-    today3, = ax.plot(x, blue_br_dot, 'bo')
+    today3, = ax.plot(phase, blue_br_dot, 'bo')
     
     plt.ylabel('Biorhythm Status', fontsize=16)
     plt.xlabel('Date', fontsize=16)
@@ -34,6 +36,7 @@ def calcBR(birthday, date):
     
     ax.set_title('Biorhythm', size=20)
     plt.ylim(-1, 1)
+    plt.grid(True,axis='y')
 
     return mpld3.fig_to_html(fig)
     #return mpld3.fig_to_dict(fig)
@@ -45,27 +48,29 @@ def calcBRFC(birthday, date):
     k = birthday # birthdate
     
 
-    t = np.arange(x-10, x+10, 0.1)
-    t_days = np.arange(x-10, x+10, 1.0)
+    phase = int((x - k).days)
 
-    green_br = np.sin((np.pi*t)/16.5 + (k*np.pi))
-    green_br_dot = np.sin((np.pi*t_days)/16.5 + (k*np.pi))
-    green_today = np.sin((np.pi*x)/16.5 + (k*np.pi))
+    t = np.arange(phase-10, phase+10, 0.1)
+    t_days = np.arange(phase-10, phase+10, 1.0)
 
-    red_br = np.sin((np.pi*t)/14 + (k*np.pi))
-    red_br_dot = np.sin((np.pi*t_days)/14 + (k*np.pi))
-    red_today = np.sin((np.pi*x)/14 + (k*np.pi))
+    green_br = np.sin((np.pi*2*t)/16.5)
+    green_br_dots = np.sin((np.pi*2*t_days)/16.5)
+    green_br_today = np.sin((np.pi*2*phase)/16.5)
 
-    blue_br = np.sin((np.pi*t)/11.5 + (k*np.pi))
-    blue_br_dot = np.sin((np.pi*t_days)/11.5 + (k*np.pi))
-    blue_today = np.sin((np.pi*x)/11.5 + (k*np.pi))
+    red_br = np.sin((np.pi*2*t)/14)
+    red_br_dots = np.sin((np.pi*2*t_days)/14)
+    red_br_today = np.sin((np.pi*2*phase)/14)
 
-    line, = ax.plot(t, green_br, 'g', label=f"Intellectual: {round(green_today,4)*100}%")
-    today1, = ax.plot(t_days, green_br_dot, 'go')
-    line2, = ax.plot(t, red_br, 'r', label=f"Emotional: {round(red_today,4)*100}%")
-    today2, = ax.plot(t_days, red_br_dot, 'ro')
-    line3, = ax.plot(t, blue_br, 'b', label=f"Physical: {round(blue_today,4)*100}%")
-    today3, = ax.plot(t_days, blue_br_dot, 'bo')
+    blue_br = np.sin((np.pi*2*t)/11.5)
+    blue_br_dots = np.sin((np.pi*2*t_days)/11.5)
+    blue_br_today = np.sin((np.pi*2*phase)/11.5)
+
+    line, = ax.plot(t, green_br, 'g', label=f"Intellectual: {round(green_br_today,4)*100}%")
+    today1, = ax.plot(t_days, green_br_dots, 'go')
+    line2, = ax.plot(t, red_br, 'r', label=f"Emotional: {round(red_br_today,4)*100}%")
+    today2, = ax.plot(t_days, red_br_dots, 'ro')
+    line3, = ax.plot(t, blue_br, 'b', label=f"Physical: {round(blue_br_today,4)*100}%")
+    today3, = ax.plot(t_days, blue_br_dots, 'bo')
     
     plt.ylabel('Biorhythm Status', fontsize=16)
     plt.xlabel('Date', fontsize=16)
@@ -75,5 +80,6 @@ def calcBRFC(birthday, date):
     
     ax.set_title('Biorhythm', size=20)
     plt.ylim(-1, 1)
+    plt.grid(True,axis='y')
 
     return mpld3.fig_to_html(fig)
