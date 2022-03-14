@@ -7,6 +7,6 @@ urlpatterns = [
     path('login/', views.loginView , name='login'),
     path('signup/', views.signupView , name='signup'),
     path('biorhythm/<user_id>', views.BiorhythmView.as_view() , name='biorhythm'),
-    path('contacts/<int:user_id>', views.eventList , name='contacts'),
-    path('events/<int:user_id>', views.schedulerView , name='events'),
+    path('contacts/<user_id>', views.eventList , name='contacts'),
+    path('events/<user_id>', views.schedulerView , name='events'),
 ] 
