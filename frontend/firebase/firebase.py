@@ -1,7 +1,7 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-
+from .. import models
 
 def init_firebase():
     cred = credentials.Certificate({
@@ -20,6 +20,21 @@ def init_firebase():
         firebase_admin.initialize_app(cred)
     except(ValueError):
         pass
+
+    
+    
+class userDao():
+    def __init__(self):
+        self.db = firestore.client()
+
+    def get_user_by_id(self, id):
+        db = self.db
+
+        user_ref = db.collection(u'Users').document(id)
+        user = user_ref.get().to_dict()
+        return user
+
+
 
 # def create_user(user):
 #     db = firestore.client()
