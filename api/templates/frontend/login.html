@@ -60,6 +60,7 @@ min-height: 22vh !important;
 
 
 {% block page-content %}
+<form action="/" method="POST"></form>
 <blockquote class="text-center">
   <h3 class="loginTitle">Biorhythm Sitatyr</h3>
 </blockquote>
@@ -70,17 +71,28 @@ min-height: 22vh !important;
 </div>
 
 <div class="mx-auto">
-  <input type="text" class="form-control shadow-none" placeholder="Username" aria-label="Username">
+  <input type="text" class="form-control shadow-none" placeholder="Email" aria-label="email" name="email">
 </div>
 
-<div class="mx-auto">
-  <input type="password" class="form-control shadow-none" placeholder="Password" id="myInput">
+<div class="mx-auto"> 
+  <input type="password" class="form-control shadow-none" placeholder="Password" id="myInput" name="password">
   <input type="checkbox" onclick="myFunction()">  Show Password
+  <input type="submit">
 </div>
 
 <div class="btndiv">
   <button type="button" class="btn">Login</button>
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert-signup">
+      <div class="alert alert-danger " role="alert">
+          {{ message }}
+      </div>
+  </div>
+  {% endfor %}
+  {% endif %}
 </div>
+</form>
 {% endblock %}
 
 {% block navbar %}

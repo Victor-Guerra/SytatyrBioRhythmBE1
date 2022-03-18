@@ -1,17 +1,32 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.template import loader
 from django.http import HttpResponse
 from django.http import Http404
+from django.contrib.auth import authenticate
 
 
 def loginView(request):
-    display_forecast = False
-    template = loader.get_template('frontend/login.html')
-    context = {
-        'display_forecast': display_forecast,
-    }
-    return HttpResponse(template.render(context, request))
 
+    if request.method == "GET":
+        display_forecast = False
+        template = loader.get_template('frontend/login.html')
+        context = {
+            'display_forecast': display_forecast,
+        }
+        return HttpResponse(template.render(context, request))
+
+    elif request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username,password = password)
+    
+        if user is not None:
+            auth.login(request, user)
+            return redirect('/')
+        else:
+            messages.info(request, 'invalid credentials')
+            return redirect('/')
 
 def signupView(request):
     display_forecast = False
