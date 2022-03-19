@@ -5,5 +5,5 @@ urlpatterns = [
     path('', views.loginView , name='login'),
     path('signup/', views.signupView , name='signup'),
     path('biorhythm/<int:user_id>', views.biorhythmView , name='biorhythm'),
-    path('events/', views.eventList , name='events'),
+    path('events/<user_id>', views.eventList , name='events'),
 ] 

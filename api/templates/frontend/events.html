@@ -20,23 +20,23 @@
             {% for event in enum_events %}
             <a href="#" class="list-group-item list-group-item-action">
                 <div class="container d-flex w-100 justify-content-between">
-                    <div class="col-4" data-bs-toggle="modal" data-bs-target="#eventModal{{event.0}}">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h1 class="mb-1" style="padding: 5% !important">{{event.1.date}}</h1>
+                    <div class="col-5" data-bs-toggle="modal" data-bs-target="#eventModal{{event.0}}">
+                        <div class="d-flex w-100 justify-content-between" style="padding: 10% !important">
+                            <h2 class="mb-1">{{event.1.date}}</h2>
                         </div>
                     </div>
-                    <div class="col-7" data-bs-toggle="modal" data-bs-target="#eventModal{{event.0}}">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h2 class="mb-1" style="padding: 5% !important">{{event.1.title}}</h2>
+                    <div class="col-6" data-bs-toggle="modal" data-bs-target="#eventModal{{event.0}}">
+                        <div class="d-flex w-100 justify-content-between" style="padding: 10% !important">
+                            <h2 class="mb-1">{{event.1.name}}</h2>
                         </div>
                     </div>
-                    <div class="container col-1">
-                        <div class="d-flex w-100 justify-content-between">
-                            <small class="text-muted">{% bs_icon 'trash' %}</small>
+                    <div class="container d-flex flex-column col-1">
+                        <div class="d-flex w-100 justify-content-between" style="background-color: FFFFFF !important">
+                            <small class="text-muted" style="font-size: 2rem">{% bs_icon 'trash' %}</small>
                         </div>
                         <p></p>
-                        <div class="d-flex w-100 justify-content-between">
-                            <small class="text-muted">{% bs_icon 'pencil-square' %}</small>
+                        <div class="d-flex w-100 justify-content-between" style="background-color: FFFFFF !important">
+                            <small class="text-muted" style="font-size: 2rem">{% bs_icon 'pencil-square' %}</small>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">Title: </div>
-                                    <div class="col-md-8 ms-auto">{{event.1.title}}</div>
+                                    <div class="col-md-8 ms-auto">{{event.1.name}}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">Description: </div>
