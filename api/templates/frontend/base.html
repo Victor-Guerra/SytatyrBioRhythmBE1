@@ -21,7 +21,7 @@
         }
         
         .footer {
-            bottom: 0 !important;
+          bottom: 0 !important;
         }
         
         .content {
@@ -56,13 +56,13 @@
                   <div class="collapse navbar-collapse col-10" id="navbarDropDown">
                     <ul class="navbar-nav mr-auto">
                       <li class="nav-item">
-                        <a class="nav-link active accent-color-text" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active accent-color-text" aria-current="page" href="{% url 'frontend:biorhythm' user_id %}">Home</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link accent-color-text" href="#">Contacts</a>
+                        <a class="nav-link accent-color-text" href="{% url 'frontend:contacts' user_id %}">Contacts</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link accent-color-text" href="#">Events</a>
+                        <a class="nav-link accent-color-text" href="{% url 'frontend:events' user_id %}">Events</a>
                       </li>
                     </ul>
                   </div>
@@ -79,19 +79,19 @@
         <div class="container-fluid">
           {% block page-content %}
             <div class="row gx-10">
-                <div class="left-panel container col-3" style="margin-left: 2rem !important;">
+                <div class="left-panel container col-3 justify-content-center" style="margin-left: 2rem !important;">
                   {% block left-panel %}
                   {% endblock %}
                 </div>
-                <div class="container col-8 content-panel min-vh-100 max-vh-70">
+                <div class="container col-8 content-panel ">
                   {% block content-panel %}
                   {% endblock %}
                 </div>
             </div>
-            {% endblock %}
           </div>
+        {% endblock %}
             <br>
-        <div class="footer container-fluid">
+        <footer class="footer container-fluid">
           {% block footer %}
             <div class="row">
                 <div class="container-fluid col-12 main-color-bg accent-color-text ">

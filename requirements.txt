@@ -1,3 +1,4 @@
 Django>=4.0.3
 firebase-admin>=5.2.0
 matplotlib>=3.5.1
+mpdl3 >= 0.5.7
