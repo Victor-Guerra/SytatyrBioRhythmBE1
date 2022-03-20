@@ -13,7 +13,7 @@
         
         .left-panel {
             background-color: #414288 !important;
-            margin-right: 5%; !important;
+            margin-right: 5% !important;
         }
         
         .content-panel {
@@ -21,7 +21,6 @@
         }
         
         .footer {
-          position: fixed !important;
           bottom: 0 !important;
         }
         
@@ -39,7 +38,7 @@
         .logout {
           right: 0 !important;
         }
-        {% block styles %} {% endblock %}
+       {% block styles %} {% endblock %}
     </style>
     <meta charset="utf-8">
     <title>{% block title %}Home{% endblock %}</title>
@@ -79,7 +78,7 @@
         <br>
         <div class="container-fluid">
           {% block page-content %}
-            <div class="row">
+            <div class="row gx-10">
                 <div class="left-panel container col-3 justify-content-center" style="margin-left: 2rem !important;">
                   {% block left-panel %}
                   {% endblock %}
