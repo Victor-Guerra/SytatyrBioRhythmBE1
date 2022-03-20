@@ -2,7 +2,7 @@ import enum
 import datetime
 import time
 from unicodedata import name
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template import loader
 from django.http import HttpResponse
 from django.http import Http404
@@ -48,6 +48,12 @@ def schedulerView(request):
     pass
 
 def eventList(request, user_id):
+    delete_event = request.POST.get("delete-event")
+
+    if delete_event:
+        EventDAO().delete_event(event_id=delete_event)
+        return redirect('/events/{0}'.format(user_id))
+
     events = EventDAO().get_user_events(user_id=user_id)
     for event in events:
         event.update({'date': datetime.datetime.fromtimestamp(int(event.get('date')))})
@@ -55,6 +61,7 @@ def eventList(request, user_id):
     enum_events = enumerate(events)
     template = loader.get_template("frontend/events.html"); 
     context = {
+        'user_id': user_id,
         'display_forecast': True,
         'enum_events': enum_events,
     }

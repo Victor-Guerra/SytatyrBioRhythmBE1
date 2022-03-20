@@ -25,3 +25,7 @@ class EventDAO():
             eventsList.append(event_map)
 
         return eventsList
+
+    def delete_event(self, event_id):
+        db = self.db
+        db.collection(u'Events').document(u"{0}".format(event_id)).delete()

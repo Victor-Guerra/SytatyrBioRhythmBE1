@@ -32,7 +32,7 @@
                     </div>
                     <div class="container d-flex flex-column col-1">
                         <div class="d-flex w-100 justify-content-between" style="background-color: FFFFFF !important">
-                            <small class="text-muted" style="font-size: 2rem">{% bs_icon 'trash' %}</small>
+                            <small class="text-muted" style="font-size: 2rem" data-bs-target="#deleteModalToggle" data-bs-toggle="modal">{% bs_icon 'trash' %}</small>
                         </div>
                         <p></p>
                         <div class="d-flex w-100 justify-content-between" style="background-color: FFFFFF !important">
@@ -71,8 +71,30 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-warning">Modify</button>
-                            <button type="button" class="btn btn-danger">Delete</button>
+                            <button type="button" class="btn btn-warning" data-bs-target="" data-bs-toggle="modal">Modify</button>
+                            <button type="button" class="btn btn-danger" data-bs-target="#deleteModalToggle" data-bs-toggle="modal">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="deleteModalToggle" aria-hidden="true"
+                aria-labelledby="deleteModalToggleLabel" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalToggleLabel">Delete event notice</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete the event?
+                            The event will be deleted for all participants and cannot be undone.
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <Form class="back-button" action="" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" name="delete-event" value="{{event.1.id}}" class="btn btn-danger">Delete</button>
+                            </Form>
                         </div>
                     </div>
                 </div>
