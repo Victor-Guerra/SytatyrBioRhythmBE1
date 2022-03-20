@@ -1,8 +1,11 @@
 import os
+from sqlite3 import Timestamp
 from django.shortcuts import redirect, render
 from django.template import loader
 from django.http import HttpResponse
 from django.http import Http404
+import numpy
+from rsa import encrypt
 from .firebase.login import get_user_check
 from django.contrib import messages
 from passlib.hash import django_pbkdf2_sha256
@@ -22,6 +25,9 @@ import requests
 from firebase_admin import storage
 import requests
 from passlib.hash import django_pbkdf2_sha256
+import datetime
+from datetime import datetime
+from datetime import timedelta
 
 
 #PATH for Google Credentials
@@ -61,6 +67,14 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
             source_file_name, destination_blob_name
         )
     )
+
+def get_blob_image(picTemplate):
+    storage_client = gs.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.get_blob(picTemplate)
+    url = blob.generate_signed_url(version="v4",expiration= 100, method="GET")
+    return url
+
 
 def loginView(request):
 
@@ -143,6 +157,7 @@ def signupView(request):
             upload_blob(bucket_name,defprofilepic_path + '/' + profilePicture, profilePicture)
             return redirect('/')    
 
+
 class BiorhythmView(View):
     display_br = False
     display_brfc = False
@@ -151,7 +166,6 @@ class BiorhythmView(View):
     
     def get(self, request, user_id=0):
         from datetime import datetime
-
         user = userDao().get_user_by_id(id=user_id)
         if mv.userValidate.is_valid(user):
 
@@ -176,9 +190,10 @@ class BiorhythmView(View):
                 self.display_br = False
                 self.display_brfc = False
             
+
             context = {
                     'user_id': user_id,
-                    'user_img': user['profilePicture'],
+                    'user_img': get_blob_image(user['profilePicture']),
                     'user_birthdate': user_bd.strftime('%d-%m-%Y'),
                     'today_date': hoy.strftime('%d-%m-%Y'),
                     'display_br': self.display_br,
