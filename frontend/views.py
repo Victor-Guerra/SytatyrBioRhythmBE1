@@ -19,6 +19,8 @@ from os import path
 import requests
 from firebase_admin import storage
 import requests
+from passlib.hash import django_pbkdf2_sha256
+
 
 #PATH for Google Credentials
 myfilepath = Path(Path(__file__).resolve()).parent / "firebase/serviceAccountKey.json"
@@ -84,6 +86,8 @@ def signupView(request):
         profilePicture = request.POST['profilePicture']
         password = request.POST['password']
         
+        enc_password = django_pbkdf2_sha256.encrypt(password, rounds=12000, salt_size=32)
+
         if username =="" or email =="" or birthday=="" or password=="":
             messages.error(request,'There is one or more empty fields!')
             return redirect(signup_redirect)
@@ -113,7 +117,7 @@ def signupView(request):
              return redirect(signup_redirect)
         
         if len(username)> 1 and len(email)> 1 and len(birthday) > 1 and len(password) > 1 and len(profilePicture) > 1:
-            post_users(username, email, birthday, profilePicture, password)
+            post_users(username, email, birthday, profilePicture, enc_password)
             # The / line os for directory purposes
             upload_blob(bucket_name,defprofilepic_path + '/' + profilePicture, profilePicture)
             return redirect('/')    
