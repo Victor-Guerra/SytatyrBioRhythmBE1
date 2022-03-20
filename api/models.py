@@ -1,7 +1,6 @@
 from django.db import models
 
 class User(models.Model):
-    id = obo
     username = models.CharField(max_length=50)
     
     
