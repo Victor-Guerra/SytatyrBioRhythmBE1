@@ -10,6 +10,7 @@ from django.views import View
 
 from . import brcalc
 from . import modelvalidate as mv
+from django.shortcuts import redirect
 
 init_firebase()
 get_user()
@@ -83,6 +84,7 @@ class BiorhythmView(View):
                     'display_brfc': self.display_brfc,
                     'br_plot': self.br_plot,
                     'brfc_plot': self.brfc_plot,
+                    'user_name': user['username'],
             }
             return render(request, "frontend/biorhythm/biorhythm.html", context)
         else:
@@ -95,4 +97,12 @@ def schedulerView(request):
 def eventList(request):
     pass
 
+def updateUserDetails(request):
+    userImage = request.POST.get("userImage")
+    userName = request.POST.get("userName")
+    userBirthdate = request.POST.get("userBirthdate")
+    userId = request.POST.get("userId")
+    
+    userDao().update_user_details(userId, userBirthdate, userName, userImage)
+    return redirect('/biorhythm/{0}'.format(userId))
 # Create your views here.

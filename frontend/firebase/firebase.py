@@ -34,6 +34,17 @@ class userDao():
         user = user_ref.get().to_dict()
         return user
 
+    def update_user_details(self, id, user_birthdate, user_name, user_img):
+        db = self.db
+
+        db.collection(u'Users').document(id).update({u'birthday': user_birthdate})
+        db.collection(u'Users').document(id).update({u'username': user_name})
+        db.collection(u'Users').document(id).update({u'profilePicture': user_img})
+
+
+
+
+
 
 
 # def create_user(user):
@@ -68,11 +79,11 @@ def get_user():
 #         print(f'{event.id} => {event.to_dict()}')
 
 
-def create_user():
-    db = firestore.client()
+#def create_user():
+    #db = firestore.client()
     # user_ref = db.collection("Users")
     # await user_ref.add({"username": "Teston"})
-    user_ref = db.collection(u'Users')
-    user_ref.add({
-        u'username': "El cenado"
-    })
+    #user_ref = db.collection(u'Users')
+    #user_ref.add({
+        #u'username': "El cenado"
+    #})
