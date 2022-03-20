@@ -1,0 +1,221 @@
+{% extends "frontend/base.html" %}
+
+{% block styles %}
+
+.text_up_input{
+    font-family : Tahoma !important;
+}
+
+.username-signup-div{
+padding-right: 8% !important;
+width: 80vw !important;
+padding-top: 2rem !important;
+padding-left: 54% !important;
+}
+
+.password-signup-div{
+padding-right: 8% !important;
+width: 80vw !important;
+padding-top: 1rem !important;
+padding-left: 54% !important;
+}
+
+.email-signup-div{
+padding-right: 8% !important;
+width: 80vw !important;
+padding-top: 1rem !important;
+padding-left: 54% !important;
+}
+
+
+.birthday-signup-div{
+padding-right: 8% !important;
+width: 80vw !important;
+padding-top: 1rem !important;
+padding-left: 54% !important;
+}
+
+.photo-signup-div{
+padding-right: 4% !important;
+width: 86vw !important;
+padding-top: 1rem !important;
+padding-left: 64% !important;
+}
+
+.photo-signup-div2{
+padding-right: 12% !important;
+padding-left: 12% !important;
+width: 86vw !important;
+}
+
+.photo-signup{
+max-height: 15rem !important;
+max-width: 15rem !important;
+border-radius: 50% !important;
+}
+
+.signup-title{
+padding-left: 50% !important;
+padding-top: 6rem !important;
+font-size: 220% !important;
+font-family: Tahoma !important;
+font-weight: bold !important;
+}
+
+.btn-signup{
+color: white !important;
+font-family : Tahoma !important;
+border-radius: 20vw !important;
+font-size: 145% !important;
+width: 14rem !important;
+padding: 10px 20px !important;
+font-weight: bold !important;
+display:block !important;
+margin: 0 auto !important;
+background-image: linear-gradient(to right, #682D63 0%,#414288 51%, #682D63 100%);
+}
+
+.btndiv-signup{
+padding-top: .5rem !important;
+}
+
+.signup-footer-row{
+padding-left: 50% !important;
+}
+
+.signup-bottom-font{
+color: white !important;
+}
+.color-link-footer-signup{
+color: #DEEFB7 !important;
+}
+
+.alert-signup{
+padding-top: 2rem !important;
+}
+
+figure{
+width: 50% !important;
+margin: 0 !important;
+padding: 350px 0 0 0 !important;
+position: fixed !important;
+left: 0 !important;
+bottom: 0px !important;
+overflow: hidden !important;
+background:url('https://tec.mx/sites/default/files/2018-12/mural-1920x1080_0.jpg');
+animation:roll 130s linear infinite !important;
+height: 130rem !important;
+box-shadow: 8px 0 15px #682D63, 0 0 5px #0000FF !important;
+
+}
+
+@keyframes roll{
+0%{background-position:0 0;}
+100%{background-position:-1000px 0;}
+}
+
+{% endblock %}
+
+{% block page-content %}
+{% endblock %}
+
+
+{% block navbar %}
+<div class="image-signup-div">
+    <figure>
+        <img class="img-fluid image-signup" alt="100x8900">
+    </figure>
+
+</div>
+
+
+<div class="mx-auto">
+    <blockquote class="text-center ">
+        <h3 class="signup-title">WELCOME, NICE TO MEET YOU!</h3>
+    </blockquote>
+</div>
+
+<form action="/signup/" method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <div class="mx-auto username-signup-div">
+        <span style="color:#ff0000">*</span>
+        <label class="form-label text_up_input">Username</label>
+        <input type="text" class="form-control shadow-none" placeholder="10-char-max" name="username" maxlength="15">
+    </div>
+
+    <div class="mx-auto password-signup-div">
+        <span style="color:#ff0000">*</span>
+        <label class="form-label text_up_input">Password</label>
+        <input type="password" class="form-control shadow-none" placeholder="15-char-max" name="password" id="myInput"
+            maxlength="15">
+        <input type="checkbox" onclick="myFunction()"> Show Password
+    </div>
+
+    <div class="mx-auto email-signup-div">
+        <span style="color:#ff0000">*</span>
+        <label class="form-label text_up_input">E-mail</label>
+        <input type="text" class="form-control shadow-none" placeholder="40-char-max" name="email" maxlength="40" >
+    </div>
+    <div class="mx-auto birthday-signup-div">
+        <span style="color:#ff0000">*</span>
+        <label class="form-label text_up_input">Birthday</label>
+        <input type="text" class="form-control shadow-none" placeholder="Birthday(dd-mm-yyyy)" name="birthday"
+            maxlength="10">
+    </div>
+
+    <div class="photo-signup-div">
+        <div class="mb-5">
+            <span style="color:#ff0000">*</span>
+            <label for="Image" class="form-label text_up_input">Profile Picture</label>
+            <input class="form-control" type="file" id="formFile" onchange="preview()" name="profilePicture">
+        </div>
+        <div class="photo-signup-div2">
+            <img id="frame" src="" class="rounded-circle z-depth-2 photo-signup" />
+        </div>
+        <div class="btndiv-signup">
+            <button class="btn-signup" type="submit">Sign-up</button>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert-signup">
+                <div class="alert alert-danger " role="alert">
+                    {{ message }}
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</form>
+
+
+<script>
+    function preview() {
+        frame.src = URL.createObjectURL(event.target.files[0]);
+    }
+
+    function LoginPage() {
+        location.href = "/";
+    }
+
+    function myFunction() {
+        var x = document.getElementById("myInput");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+
+</script>
+
+{% endblock %}
+
+{% block footer %}
+<div class="row">
+    <div class="container-fluid col-12 main-color-bg signup-footer-row">
+        <p class="text-center signup-bottom-font">Already have an account? <a href="#"
+                class="link-primary color-link-footer-signup" onclick="LoginPage()">Login</a></p>
+    </div>
+</div>
+{% endblock %}
