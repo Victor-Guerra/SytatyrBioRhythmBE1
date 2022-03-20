@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.http import Http404
 from .firebase.firebase import userDao
 from django.views import View
+from datetime import datetime
 
 from . import brcalc
 from . import modelvalidate as mv
@@ -34,9 +35,7 @@ class BiorhythmView(View):
     br_plot = ""
     brfc_plot = ""
     
-    def get(self, request, user_id=0):
-        from datetime import datetime
-
+    def get(self, request, user_id=""):
         user = userDao().get_user_by_id(id=user_id)
         if mv.userValidate.is_valid(user):
 
@@ -81,5 +80,41 @@ def schedulerView(request):
 
 def eventList(request):
     pass
+
+class FriendBiorhythm(View):
+    # temp fields
+    display_br = False
+    display_brfc = False
+    br_plot = ""
+    brfc_plot = ""
+    friend_brplot = ""
+
+    def get(self, request, user_id=""):
+        # temp get method
+        user = userDao().get_user_by_id(id=user_id)
+        if mv.userValidate.is_valid(user):
+
+            user_bd = datetime.strptime(user['birthday'], '%d-%m-%Y')
+            hoy = datetime.today()
+
+            # needed for ticket
+            self.friend_brplot = brcalc.calcBR(user_bd, hoy)
+
+            
+            context = {
+                    'user_id': user_id,
+                    'user_img': user['profilePicture'],
+                    'user_birthdate': user_bd.strftime('%d-%m-%Y'),
+                    'today_date': hoy.strftime('%d-%m-%Y'),
+                    'display_br': self.display_br,
+                    'display_brfc': self.display_brfc,
+                    'br_plot': self.br_plot,
+                    'brfc_plot': self.brfc_plot,
+                    'friendName': 'obo',
+                    'friend_brplot': self.friend_brplot,
+            }
+            return render(request, "frontend/biorhythm/friendbr.html", context)
+        else:
+            raise Http404("Invalid User")
 
 # Create your views here.
