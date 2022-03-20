@@ -9,7 +9,7 @@ from .firebase.firebase import create_user
 from .firebase.firebase import get_user
 from .firebase.login import get_user_check
 from django.contrib import messages
-
+from passlib.hash import django_pbkdf2_sha256
 
 init_firebase()
 
@@ -26,10 +26,9 @@ def loginView(request):
     elif request.method == "POST":
         email = request.POST['email']
         password = request.POST['password']
-        user = get_user_check(email, password)
-
-        print(user)
-        if user:
+        user, isvalid = get_user_check(email, password)
+        #print(enc_password)
+        if isvalid:
            print("Logged in successfully")
            return redirect(f'/biorhythm/{user["id"]}')
         else: 
