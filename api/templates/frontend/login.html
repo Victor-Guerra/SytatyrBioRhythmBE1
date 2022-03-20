@@ -18,7 +18,7 @@ border-left: none !important;
 border-right: none !important;
 }
 .mx-auto{
-padding: 1.5rem !important;
+padding: 1.2rem !important;
 width: 20rem !important;
 }
 
@@ -42,56 +42,62 @@ min-height: 22vh !important;
 }
 
 .color-font-footer{
-  padding-right: 2rem !important;
-  color: white !important;
-  font-size: 1.4rem !important;
-  padding-top: -5rem !important;
+padding-right: 2rem !important;
+color: white !important;
+font-size: 1.4rem !important;
+padding-top: -5rem !important;
 }
 
 .color-link-footer{
-  color: #DEEFB7 !important;
+color: #DEEFB7 !important;
 }
 
 .btndiv{
-  margin-top: 1.5rem !important;
-  }
-  
+margin-top: 1.5rem !important;
+}
+
+.alert-login{
+  padding-top: 2rem !important;
+  padding-left: 30rem !important;
+  padding-right: 30rem !important;
+}
+
 {% endblock %}
 
 
 {% block page-content %}
-<form action="/" method="POST"></form>
-<blockquote class="text-center">
-  <h3 class="loginTitle">Biorhythm Sitatyr</h3>
-</blockquote>
+<form action="" method="POST">
+  {% csrf_token %}
+  <blockquote class="text-center">
+    <h3 class="loginTitle">Biorhythm Sitatyr</h3>
+  </blockquote>
 
-<div class="text-center">
-  <img class="rounded-circle z-depth-2" alt="Responsive image" width="230 vh" height="230 vw"
-    src="https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png">
-</div>
-
-<div class="mx-auto">
-  <input type="text" class="form-control shadow-none" placeholder="Email" aria-label="email" name="email">
-</div>
-
-<div class="mx-auto"> 
-  <input type="password" class="form-control shadow-none" placeholder="Password" id="myInput" name="password">
-  <input type="checkbox" onclick="myFunction()">  Show Password
-  <input type="submit">
-</div>
-
-<div class="btndiv">
-  <button type="button" class="btn">Login</button>
-  {% if messages %}
-  {% for message in messages %}
-  <div class="alert-signup">
-      <div class="alert alert-danger " role="alert">
-          {{ message }}
-      </div>
+  <div class="text-center">
+    <img class="rounded-circle z-depth-2" alt="Responsive image" width="230 vh" height="230 vw"
+      src="https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png">
   </div>
-  {% endfor %}
-  {% endif %}
-</div>
+
+  <div class="mx-auto">
+    <input type="text" class="form-control shadow-none" placeholder="Email" aria-label="email" name="email">
+  </div>
+
+  <div class="mx-auto">
+    <input type="password" class="form-control shadow-none" placeholder="Password" id="myInput" name="password">
+    <input type="checkbox" onclick="myFunction()"> Show Password
+  </div>
+
+  <div class="btndiv">
+    <button type="submit" class="btn">Login</button>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert-login">
+      <div class="alert alert-danger " role="alert">
+        {{ message }}
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
 </form>
 {% endblock %}
 
@@ -101,26 +107,26 @@ min-height: 22vh !important;
 {% block footer %}
 <div class="row login-footer-row">
   <div class="container-fluid col-12 main-color-bg loginfooter">
-    <p class="text-center color-font-footer">Don't have an account yet? <a href="#" class="link-primary color-link-footer" onclick="SignUpPage()">Sign-Up</a></p>
+    <p class="text-center color-font-footer">Don't have an account yet? <a href="#"
+        class="link-primary color-link-footer" onclick="SignUpPage()">Sign-Up</a></p>
   </div>
 </div>
 
 
 <script>
-  function SignUpPage()
-  {
-       location.href = "/signup";
-  } 
-  
+  function SignUpPage() {
+    location.href = "/signup";
+  }
+
   function myFunction() {
     var x = document.getElementById("myInput");
     if (x.type === "password") {
-    x.type = "text";
+      x.type = "text";
     } else {
-    x.type = "password";
+      x.type = "password";
+    }
   }
-}
 
-  </script>
+</script>
 
 {% endblock %}

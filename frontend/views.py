@@ -1,9 +1,17 @@
+from collections import UserList
 from django.shortcuts import redirect, render
 from django.template import loader
 from django.http import HttpResponse
 from django.http import Http404
 from django.contrib.auth import authenticate
+from .firebase.firebase import init_firebase
+from .firebase.firebase import create_user
+from .firebase.firebase import get_user
+from .firebase.login import get_user_check
+from django.contrib import messages
 
+
+init_firebase()
 
 def loginView(request):
 
@@ -16,17 +24,26 @@ def loginView(request):
         return HttpResponse(template.render(context, request))
 
     elif request.method == "POST":
-        username = request.POST['username']
+        email = request.POST['email']
         password = request.POST['password']
+        user = get_user_check(email, password)
 
-        user = authenticate(username=username,password = password)
-    
-        if user is not None:
-            auth.login(request, user)
-            return redirect('/')
-        else:
-            messages.info(request, 'invalid credentials')
-            return redirect('/')
+        print(user)
+        if user:
+           print("Logged in successfully")
+           return redirect(f'/biorhythm/{user["id"]}')
+        else: 
+           print("Invalid Passwords")
+           messages.error(request,'Invalid Credentials, please try again')
+           return redirect('/')
+       
+        #user = authenticate(username=username,password = password)
+        #if user is not None:
+        #    auth.login(request, user)
+        #    return redirect('/')
+        #else:
+        #    messages.info(request, 'invalid credentials')
+        #    return redirect('/')
 
 def signupView(request):
     display_forecast = False
