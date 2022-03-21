@@ -3,6 +3,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 from .. import models
 
+
 cred = credentials.Certificate({
     "type": "service_account",
     "project_id": "biorhythmsytatyr",
@@ -17,6 +18,7 @@ cred = credentials.Certificate({
     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-o6bcg%40biorhythmsytatyr.iam.gserviceaccount.com"
 })
 firebase_admin.initialize_app(cred)
+
     
 class userDao():
     def __init__(self):
@@ -37,3 +39,10 @@ class userDao():
             user_dict = user.to_dict()
             user_dict.update({"id": user.id})
             return user_dict
+
+    def update_user_details(self, id, user_birthdate, user_name, user_img):
+        db = self.db
+
+        db.collection(u'Users').document(id).update({u'birthday': user_birthdate})
+        db.collection(u'Users').document(id).update({u'username': user_name})
+        db.collection(u'Users').document(id).update({u'profilePicture': user_img})

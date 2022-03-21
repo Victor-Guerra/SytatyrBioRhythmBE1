@@ -186,6 +186,7 @@ class BiorhythmView(View):
                     'display_brfc': self.display_brfc,
                     'br_plot': self.br_plot,
                     'brfc_plot': self.brfc_plot,
+                    'user_name': user['username'],
             }
             return render(request, "frontend/biorhythm/biorhythm.html", context)
         else:
@@ -234,4 +235,12 @@ class FriendBiorhythm(View):
         else:
             raise Http404("Invalid User")
 
+def updateUserDetails(request):
+    userImage = request.POST.get("userImage")
+    userName = request.POST.get("userName")
+    userBirthdate = request.POST.get("userBirthdate")
+    userId = request.POST.get("userId")
+    
+    userDao().update_user_details(userId, userBirthdate, userName, userImage)
+    return redirect('/biorhythm/{0}'.format(userId))
 # Create your views here.
