@@ -53,7 +53,7 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
 
     blob.upload_from_filename(source_file_name)
 
-def get_blob_image(picTemplate):
+def get_blob_image(picTemplate, bucket_name):
     storage_client = gs.Client()
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.get_blob(picTemplate)
@@ -149,6 +149,7 @@ class BiorhythmView(View):
     display_brfc = False
     br_plot = ""
     brfc_plot = ""
+    bucket_name='biorhythmsytatyr.appspot.com'
     
     def get(self, request, user_id=""):
         user = userDao().get_user_by_id(id=user_id)
@@ -178,7 +179,7 @@ class BiorhythmView(View):
 
             context = {
                     'user_id': user_id,
-                    'user_img': get_blob_image(user['profilePicture']),
+                    'user_img': get_blob_image(user['profilePicture'], self.bucket_name),
                     'user_birthdate': user_bd.strftime('%d-%m-%Y'),
                     'today_date': hoy.strftime('%d-%m-%Y'),
                     'display_br': self.display_br,
