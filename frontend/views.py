@@ -49,21 +49,18 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
 
     blob.upload_from_filename(source_file_name)
 
-def loginView(request):
+class LoginView(View):
 
-    if request.method == "GET":
-        display_forecast = False
+    def get(self, request):
         template = loader.get_template('frontend/login.html')
         context = {
-            'display_forecast': display_forecast,
         }
         return HttpResponse(template.render(context, request))
 
-    elif request.method == "POST":
+    def post(self, request):
         email = request.POST['email']
         password = request.POST['password']
         user, isvalid = get_user_check(email, password)
-        #print(enc_password)
         if isvalid:
            print("Logged in successfully")
            return redirect(f'/biorhythm/{user["id"]}')

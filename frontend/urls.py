@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 
 app_name = 'frontend'
 urlpatterns = [
-    path('', views.loginView , name='login'),
+    path('', views.LoginView.as_view() , name='login'),
     path('signup/', views.SignupView.as_view() , name='signup'),
     path('biorhythm/<user_id>', views.BiorhythmView.as_view() , name='biorhythm'),
     path('biorhythm/friend/<user_id>', views.FriendBiorhythm.as_view() , name='friendbiorhythm'),
