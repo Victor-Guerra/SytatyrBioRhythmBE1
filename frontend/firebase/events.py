@@ -29,3 +29,7 @@ class EventDAO():
     def delete_event(self, event_id):
         db = self.db
         db.collection(u'Events').document(u"{0}".format(event_id)).delete()
+
+    def update_event(self, event_id, date, description, name, participants):
+        db = self.db
+        db.collection(u'Events').document(event_id).update({'date': date, 'name': name, 'description': description, 'participants': participants})

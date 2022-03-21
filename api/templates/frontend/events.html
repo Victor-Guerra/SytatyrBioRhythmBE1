@@ -3,10 +3,10 @@
 {% block title %} Events {% endblock %}
 {% block styles %}
 .left-panel {
-    background-color: #FFFFFF!important;
+background-color: #FFFFFF!important;
 }
 .content-panel {
-    background-color: #98DFAF !important;
+background-color: #98DFAF !important;
 }
 {% endblock %}
 {% block page-content %}
@@ -32,17 +32,19 @@
                     </div>
                     <div class="container d-flex flex-column col-1">
                         <div class="d-flex w-100 justify-content-between" style="background-color: FFFFFF !important">
-                            <small class="text-muted" style="font-size: 2rem" data-bs-target="#deleteModalToggle" data-bs-toggle="modal">{% bs_icon 'trash' %}</small>
+                            <small class="text-muted" style="font-size: 2rem" data-bs-target="#deleteModalToggle"
+                                data-bs-toggle="modal">{% bs_icon 'trash' %}</small>
                         </div>
                         <p></p>
                         <div class="d-flex w-100 justify-content-between" style="background-color: FFFFFF !important">
-                            <small class="text-muted" style="font-size: 2rem">{% bs_icon 'pencil-square' %}</small>
+                            <small class="text-muted" style="font-size: 2rem" data-bs-target="#updateModalToggle"
+                                data-bs-toggle="modal">{% bs_icon 'pencil-square' %}</small>
                         </div>
                     </div>
                 </div>
             </a>
-            <div class="modal fade" id="eventModal{{event.0}}" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel"
-                aria-hidden="true">
+            <div class="modal fade" id="eventModal{{event.0}}" tabindex="-1" role="dialog"
+                aria-labelledby="eventModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -71,14 +73,16 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-warning" data-bs-target="" data-bs-toggle="modal">Modify</button>
-                            <button type="button" class="btn btn-danger" data-bs-target="#deleteModalToggle" data-bs-toggle="modal">Delete</button>
+                            <button type="button" class="btn btn-warning" data-bs-target="#updateModalToggle"
+                                data-bs-toggle="modal">Modify</button>
+                            <button type="button" class="btn btn-danger" data-bs-target="#deleteModalToggle"
+                                data-bs-toggle="modal">Delete</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="deleteModalToggle" aria-hidden="true"
-                aria-labelledby="deleteModalToggleLabel" tabindex="-1">
+            <div class="modal fade" id="deleteModalToggle" aria-hidden="true" aria-labelledby="deleteModalToggleLabel"
+                tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -93,9 +97,46 @@
                             <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <Form class="back-button" action="" method="POST">
                                 {% csrf_token %}
-                                <button type="submit" name="delete-event" value="{{event.1.id}}" class="btn btn-danger">Delete</button>
+                                <button type="submit" name="delete-event" value="{{event.1.id}}"
+                                    class="btn btn-danger">Delete</button>
                             </Form>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="updateModalToggle" aria-hidden="true" aria-labelledby="updateModalToggleLabel"
+                tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateModalToggleLabel">Modify event information</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form class="back-button" action="/events/{{event.1.owner.id}}" method="POST">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="date-text" class="col-form-label">Date:</label>
+                                    <input id="inputDate" class="form-control" value="{{event.1.date}}" name="updateDate">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="title-text" class="col-form-label">Title:</label>
+                                    <input id="inputTitle" class="form-control" value="{{event.1.name}}" name="updateName">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description-text" class="col-form-label">Description:</label>
+                                    <input id="inputDescription" class="form-control" value="{{event.1.description}}" name="updateDescription">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="participants-text" class="col-form-label">Participants:</label>
+                                    <input id="inputParticipants" class="form-control" value="{{event.1.participants |safeseq|join:', ' }}" 
+                                    name="updateParticipants">
+                                </div>
+                                <button type="submit" name="update-event" value="{{event.1.id}}" class="btn btn-warning">Update</button>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
             </div>
