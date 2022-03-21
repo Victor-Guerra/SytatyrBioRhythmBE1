@@ -10,8 +10,6 @@ urlpatterns = [
     path('biorhythm/<user_id>', views.BiorhythmView.as_view() , name='biorhythm'),
     path('biorhythm/friend/<user_id>', views.FriendBiorhythm.as_view() , name='friendbiorhythm'),
     path('contacts/<user_id>', views.eventList , name='contacts'),
-    path('events/<user_id>', views.schedulerView , name='events'),
+    path('events/<user_id>', views.eventList , name='events'),
     path('updateDetails/', views.updateUserDetails, name='updateUserDetails'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    
- 
