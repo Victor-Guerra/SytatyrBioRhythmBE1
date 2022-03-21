@@ -28,7 +28,7 @@ from . import modelvalidate as mv
 
 from cmath import pi
 import enum
-import datetime
+#import datetime
 import re
 import time
 from unicodedata import name
@@ -36,9 +36,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template import loader
 from django.http import HttpResponse
 from django.http import Http404
-from .firebase.firebase import init_firebase
-from .firebase.firebase import create_user
-from .firebase.firebase import get_user
+#from .firebase.firebase import init_firebase
+#from .firebase.firebase import create_user
+#from .firebase.firebase import get_user
 from .firebase.events import EventDAO
 
 
@@ -228,8 +228,8 @@ def eventList(request, user_id):
             new_date = received_date.replace("AM", "am")
         elif received_date[-2:] == "PM":
             new_date = received_date.replace("PM", "pm")
-        datetime_object = datetime.datetime.strptime(new_date, "%B %d, %Y, %I:%M %p")
-        converted_date = datetime.datetime.timestamp(datetime_object)
+        datetime_object = datetime.strptime(new_date, "%B %d, %Y, %I:%M %p")
+        converted_date = datetime.timestamp(datetime_object)
         received_name = request.POST.get("updateName")
         received_description = request.POST.get("updateDescription")
         received_participants = request.POST.get("updateParticipants")
@@ -239,7 +239,7 @@ def eventList(request, user_id):
 
     events = EventDAO().get_user_events(user_id=user_id)
     for event in events:
-        date1 = datetime.datetime.fromtimestamp(int(event.get('date')))        
+        date1 = datetime.fromtimestamp(int(event.get('date')))        
         event.update({'date': date1.strftime("%B %d, %Y, %I:%M %p")})
 
     enum_events = enumerate(events)

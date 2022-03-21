@@ -4,3 +4,4 @@ matplotlib>=3.5.1
 mpdl3 >= 0.5.7
 passlib>=1.7.4
 Pillow>=9.0.1
+django-bootstrap-icons>=0.7.8
