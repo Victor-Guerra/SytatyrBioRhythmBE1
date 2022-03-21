@@ -135,46 +135,71 @@ box-shadow: 8px 0 15px #682D63, 0 0 5px #0000FF !important;
     </blockquote>
 </div>
 
-<form action="/signup/" method="POST">
+<form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form }}
     <div class="mx-auto username-signup-div">
         <span style="color:#ff0000">*</span>
-        <label class="form-label text_up_input">Username</label>
-        <input type="text" class="form-control shadow-none" placeholder="10-char-max" name="username" maxlength="15">
+        <label class="form-label text_up_input">Username</label>{#{{ form.username.label }}</label>#}
+        <input type="text" class="form-control shadow-none" placeholder="15-char-max" name="username" maxlength="15">
+        {#<div class="form-control shadow-none">#}
+            {#{{ form.username }}#}
+        {#</div>#}
+        {#{{ form.username.errors }}#}
     </div>
 
     <div class="mx-auto password-signup-div">
         <span style="color:#ff0000">*</span>
-        <label class="form-label text_up_input">Password</label>
-        <input type="password" class="form-control shadow-none" placeholder="15-char-max" name="password" id="myInput"
-            maxlength="15">
+        <label class="form-label text_up_input">Password</label>{#{{ form.password.label }}</label>#}
+        <input type="password" class="form-control shadow-none" placeholder="15-char-max" name="password" id="myInput" maxlength="15">
+
+        {#<div class="form-control shadow-none">#}
+            {#{{ form.password }}#}
+        {#</div>#}
+        {#{{ form.password.errors }}#}
         <input type="checkbox" onclick="myFunction()"> Show Password
     </div>
 
     <div class="mx-auto email-signup-div">
         <span style="color:#ff0000">*</span>
-        <label class="form-label text_up_input">E-mail</label>
+        <label class="form-label text_up_input">Email</label> {#{{ form.email.label }}</label>#}
         <input type="text" class="form-control shadow-none" placeholder="40-char-max" name="email" maxlength="40" >
+
+        {#<div class="form-control shadow-none">#}
+        {#   {{ form.email }}#}
+        {#</div>#}
+        {#{{ form.email.errors }}#}
     </div>
     <div class="mx-auto birthday-signup-div">
         <span style="color:#ff0000">*</span>
-        <label class="form-label text_up_input">Birthday</label>
-        <input type="text" class="form-control shadow-none" placeholder="Birthday(dd-mm-yyyy)" name="birthday"
-            maxlength="10">
-    </div>
+        <label class="form-label text_up_input">Birthday</label> {#{{ form.birthday.label }}</label>#}
+        <input type="text" class="form-control shadow-none" placeholder="Birthday(dd-mm-yyyy)" name="birthday" maxlength="10">
 
-    <div class="photo-signup-div">
-        <div class="mb-5">
+        {#<div class="form-control shadow-none">#}
+        {#    {{ form.birthday }}#}
+        {#</div> #}
+        {#{{ form.birthday.errors }}#}
+    </div>
+        <div class="mx-auto mb-5 birthday-signup-div">
             <span style="color:#ff0000">*</span>
             <label for="Image" class="form-label text_up_input">Profile Picture</label>
             <input class="form-control" type="file" id="formFile" onchange="preview()" name="profilePicture">
+            
+            {#<div class="form-control shadow-none">#}
+                {#{{ form.profilePicture }}#}
+            {# </div> #}
+            {# {{ form.profilePicture.errors }} #}
         </div>
+    <div class="photo-signup-div">
         <div class="photo-signup-div2">
             <img id="frame" src="" class="rounded-circle z-depth-2 photo-signup" />
         </div>
+        <button class="btn-signup" type="submit">Sign-up</button>
+    </div>
+</form>
+
+
+    <div class="photo-signup-div">
         <div class="btndiv-signup">
-            <button class="btn-signup" type="submit">Sign-up</button>
             {% if messages %}
             {% for message in messages %}
             <div class="alert-signup">
@@ -186,7 +211,6 @@ box-shadow: 8px 0 15px #682D63, 0 0 5px #0000FF !important;
             {% endif %}
         </div>
     </div>
-</form>
 
 
 <script>
