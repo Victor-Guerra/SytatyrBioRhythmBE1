@@ -195,6 +195,7 @@ class BiorhythmView(View):
             context = {
                     'user_id': user_id,
                     'user_img': get_blob_image(user['profilePicture'], self.bucket_name),
+                    'modal_img': get_blob_image(user['profilePicture'], self.bucket_name),
                     'user_birthdate': user_bd.strftime('%d-%m-%Y'),
                     'today_date': hoy.strftime('%d-%m-%Y'),
                     'display_br': self.display_br,

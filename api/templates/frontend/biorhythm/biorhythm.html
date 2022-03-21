@@ -76,7 +76,7 @@ align-content: center;
 {% block left-panel %}
 <div class="container row panel-alignment">
   <div class="container col-12 user-img">
-      <img src="{{ user_img }}" class="img-fluid rounded-circle mx-auto d-block" alt="User Profile Picture" style="padding-bottom: 1rem;">
+      <img src="{{ user_img }}" class="img-fluid rounded-circle mx-auto d-block" alt="User Profile Picture" style="padding-bottom: 1rem; height: auto !important; width: auto !important;">
       <span>
       <h1 class="display-6 bold text-center accent-color-text"><strong>{{ user_name }}</strong></h1>
       </span>
@@ -104,7 +104,7 @@ align-content: center;
       <form action="/updateDetails/" method="POST">
         {% csrf_token %}
         <div class="modal-body text-center">
-          <img id="frame" src="{{ user_img }}" class="img-fluid rounded-circle z-depth-2 profile-picture img-thumbnail" alt="User Profile Picture" />
+          <img id="frame" src="{{ modal_img }}" class="img-fluid rounded-circle z-depth-2 profile-picture img-thumbnail" alt="User Profile Picture" />
           <input class="form-control" type="text" id="userId" value="{{ user_id }}" name="userId" hidden>
           <input class="form-control" type="file" id="formFile" onchange="loadImage()" name="userImage">
           <script>
