@@ -1,4 +1,6 @@
+from lib2to3.pgen2 import token
 import os
+import profile
 from sqlite3 import Timestamp
 from django.shortcuts import redirect, render
 from django.template import loader
@@ -28,7 +30,8 @@ from passlib.hash import django_pbkdf2_sha256
 import datetime
 from datetime import datetime
 from datetime import timedelta
-
+from .firebase.firebase import FirebaseAuthentication
+from django.contrib.auth import login
 
 #PATH for Google Credentials
 myfilepath = Path(Path(__file__).resolve()).parent / "firebase/serviceAccountKey.json"
@@ -90,8 +93,9 @@ def loginView(request):
         email = request.POST['email']
         password = request.POST['password']
         user, isvalid = get_user_check(email, password)
-        #print(enc_password)
+
         if isvalid:
+           login(request,user) 
            print("Logged in successfully")
            return redirect(f'/biorhythm/{user["id"]}')
         else: 
@@ -190,7 +194,6 @@ class BiorhythmView(View):
                 self.display_br = False
                 self.display_brfc = False
             
-
             context = {
                     'user_id': user_id,
                     'user_img': get_blob_image(user['profilePicture']),

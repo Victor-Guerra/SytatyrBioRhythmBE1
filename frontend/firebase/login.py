@@ -12,11 +12,4 @@ def get_user_check(email,password):
         userMap = user.to_dict()
         userMap.update({"id":user.id})
         return (userMap,django_pbkdf2_sha256.verify(password, userMap["password"]))
-        #userObject = f'{user.id} => {user.to_dict()}'
-        #print(userObject)
-
-        #if len(userObject) > 1:
-         #   print("Logged in successfully")
-        #else: 
-         #   print("Invalid Passwords")
 
