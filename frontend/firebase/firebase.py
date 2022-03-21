@@ -42,7 +42,7 @@ class userDao():
 
     def update_user_details(self, id, user_birthdate, user_name, user_img):
         db = self.db
-
+        
         db.collection(u'Users').document(id).update({u'birthday': user_birthdate})
         db.collection(u'Users').document(id).update({u'username': user_name})
         db.collection(u'Users').document(id).update({u'profilePicture': user_img})

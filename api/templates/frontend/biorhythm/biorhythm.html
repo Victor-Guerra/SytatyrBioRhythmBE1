@@ -76,7 +76,7 @@ align-content: center;
 {% block left-panel %}
 <div class="container row panel-alignment">
   <div class="container col-12 user-img">
-      <img src="{{ user_img }}" class="img-fluid rounded-circle mx-auto d-block" alt="User Profile Picture" style="padding-bottom: 1rem; height: auto !important; width: auto !important;">
+      <img src="{{ user_img }}" class="img-fluid rounded-circle mx-auto d-block" alt="User Profile Picture" style="padding-bottom: 1rem;">
       <span>
       <h1 class="display-6 bold text-center accent-color-text"><strong>{{ user_name }}</strong></h1>
       </span>
@@ -101,7 +101,7 @@ align-content: center;
         <h5 class="modal-title" id="modalTitle">User details</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="/updateDetails/" method="POST">
+      <form action="/updateDetails/" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="modal-body text-center">
           <img id="frame" src="{{ modal_img }}" class="img-fluid rounded-circle z-depth-2 profile-picture img-thumbnail" alt="User Profile Picture" />

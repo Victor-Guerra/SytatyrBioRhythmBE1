@@ -47,9 +47,6 @@ myfilepath = settings.BASE_DIR / "frontend/firebase/serviceAccountKey.json"
 def_path = str(path.realpath(myfilepath))
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = def_path
 
-#PATH for Profile Picture Image
-myprofilepic_path = Path(Path(__file__).resolve()).parent 
-defprofilepic_path = str(path.realpath(myprofilepic_path))
 
 #Upload Files to Storage
 def upload_blob(bucket_name, source_file_name, destination_blob_name):
@@ -289,11 +286,21 @@ class FriendBiorhythm(View):
             raise Http404("Invalid User")
 
 def updateUserDetails(request):
-    userImage = request.POST.get("userImage")
+    userImage = request.FILES['userImage']
+    userImageName = userImage.name
     userName = request.POST.get("userName")
     userBirthdate = request.POST.get("userBirthdate")
     userId = request.POST.get("userId")
+
+    fss = FileSystemStorage()
+    if not fss.exists(userImageName):
+        # If the file already exists, do not save it
+        file = fss.save(userImageName, userImage)
     
-    userDao().update_user_details(userId, userBirthdate, userName, userImage)
+    bucket_name='biorhythmsytatyr.appspot.com'  
+    img_path = settings.BASE_DIR / 'media/' / userImageName
+    upload_blob(bucket_name, img_path, userImageName)
+    
+    userDao().update_user_details(userId, userBirthdate, userName, userImageName)
     return redirect('/biorhythm/{0}'.format(userId))
 # Create your views here.
