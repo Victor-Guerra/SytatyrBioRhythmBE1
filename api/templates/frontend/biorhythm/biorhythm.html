@@ -48,6 +48,12 @@
   padding-bottom: 2rem;
 }
 
+.friendbr-modal {
+  width: 50% !important;
+  max-width: 100% !important;
+  min-width: 50% !important;
+}
+
 {% endblock %}
 
 {% block left-panel %}
@@ -130,4 +136,7 @@
         </div>
     </div>
   {% endif %}
+  <br>
+  {% block friendbrmodal %} 
+  {% endblock %}
 {% endblock %}
