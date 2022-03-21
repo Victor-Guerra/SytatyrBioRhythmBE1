@@ -2,9 +2,9 @@ from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
 from django.http import Http404
-from .firebase.firebase import init_firebase
-from .firebase.firebase import create_user
-from .firebase.firebase import get_user
+#from .firebase.firebase import init_firebase
+#from .firebase.firebase import create_user
+#from .firebase.firebase import get_user
 from .firebase.firebase import userDao
 from django.views import View
 
@@ -12,14 +12,14 @@ from . import brcalc
 from . import modelvalidate as mv
 from django.shortcuts import redirect
 
-init_firebase()
-get_user()
+#init_firebase()
+#get_user()
 # user = {
 #     "username": "EL kiko",
 #     "email": "kike@tristin.com"
 # }
 # create_user(user)
-create_user()
+#create_user()
 
 
 
