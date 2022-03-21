@@ -84,7 +84,11 @@ class LoginView(View):
     def post(self, request):
         email = request.POST['email']
         password = request.POST['password']
-        user, isvalid = get_user_check(email, password)
+        if email == '' or password == '':
+            messages.error(request,'Provide an email and/or a password')
+            return redirect('/')
+        else:
+            user, isvalid = get_user_check(email, password)
         if isvalid:
            print("Logged in successfully")
            return redirect(f'/biorhythm/{user["id"]}')
