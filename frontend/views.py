@@ -2,6 +2,7 @@ from lib2to3.pgen2 import token
 import os
 import profile
 from sqlite3 import Timestamp
+from traceback import print_tb
 from django.shortcuts import redirect, render
 from django.template import loader
 from django.http import HttpResponse
@@ -91,18 +92,32 @@ def loginView(request):
 
     elif request.method == "POST":
         email = request.POST['email']
+        email_cookie='False'
         password = request.POST['password']
         user, isvalid = get_user_check(email, password)
 
         if isvalid:
-           login(request,user) 
+           #login(request,user) 
+           email_cookie = email
            print("Logged in successfully")
-           return redirect(f'/biorhythm/{user["id"]}')
+           request.session['email'] = email_cookie
+           context = {
+                'user_id': user["id"],
+                'email' : email_cookie,
+                'user_img': get_blob_image(user['profilePicture'])
+           }
+           return render(request, "frontend/biorhythm/biorhythm.html", context)
+           #return redirect(f'/biorhythm/{user["id"]}')
         else: 
            print("Invalid Passwords")
+           context = {
+                'user_id': user["id"],
+                'email' : email_cookie,
+           }
            messages.error(request,'Invalid Credentials, please try again')
-           return redirect('/')
-       
+           return render(request, "frontend/login.html", context)
+           #return redirect('/')
+
         #user = authenticate(username=username,password = password)
         #if user is not None:
         #    auth.login(request, user)
@@ -156,9 +171,9 @@ def signupView(request):
              messages.error(request,'Image already exist, please change Pictures File Name')
              return redirect(signup_redirect)
         if len(username)> 1 and len(email)> 1 and len(birthday) > 1 and len(password) > 1 and len(profilePicture) > 1:
-            post_users(username, email, birthday, profilePicture, enc_password)
+            picture = upload_blob(bucket_name,defprofilepic_path + '/' + profilePicture, profilePicture)
+            post_users(username, email, birthday, picture, enc_password)
             # The / line os for directory purposes
-            upload_blob(bucket_name,defprofilepic_path + '/' + profilePicture, profilePicture)
             return redirect('/')    
 
 
