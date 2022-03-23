@@ -3,21 +3,21 @@
 
 {% block styles %}
 .user-img {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+padding-top: 1rem;
+padding-bottom: 1rem;
 }
 
 .panel-alignment {
-  padding-left: 12.5% !important;
+padding-left: 12.5% !important;
 }
 
 .panel-label {
-  font-size: 1.5rem;
+font-size: 1.5rem;
 }
 
 .edit-profile-button {
-  background-color: #5fb59c !important;
-  border: none !important;
+background-color: #5fb59c !important;
+border: none !important;
 }
 
 .calculation-button {
@@ -40,40 +40,114 @@
 }
 
 .button-row {
-  height: 8rem !important;
+height: 8rem !important;
 }
 
 .title-pad {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+padding-top: 2rem;
+padding-bottom: 2rem;
+}
+
+.save-profile-details {
+background-color: #5fb59c !important;
+border-color: #ffffff !important;
+}
+
+.cancel-profile-details {
+background-color: #682d63 !important;
+border-color: #ffffff !important;
+}
+
+.profile-picture {
+max-heigth: 5rem !important;
+max-width: 10rem !important;
+border-radius: 50% !important;
+align-content: center;
+}
+
+.friendbr-modal {
+  width: 50% !important;
+  max-width: 100% !important;
+  min-width: 50% !important;
 }
 
 {% endblock %}
 
 {% block left-panel %}
-  <div class="container row panel-alignment">
-      <div class="container col-12 user-img">
-          <img src="{{ user_img }}" class="img-fluid rounded-circle mx-auto d-block" alt="user profile picture" style="padding-bottom: 1rem;">
-          <span>
-          <h1 class="display-6 bold text-center accent-color-text"><strong>Username</strong></h1>
-          </span>
-      </div>
-      <div class="container col-12 text-center accent-color-text">
-          <p class="leading panel-label">Birthdate:</p>
-          <h1 class="display-6">{{ user_birthdate }}</h1>
-      </div>
-      <div class="container col-12 text-center accent-color-text">
-          <p class="leading panel-label">Today is:</p>
-          <h1 class="display-6">{{ today_date }}</h1>
-      </div>
-      <div class="d-grid gap-2 mx-auto col-12 text-center accent-color-text" style="padding-top: 2rem; padding-bottom: 2rem;">
-        <button type="button" class="btn btn-primary btn-lg accent-color-text edit-profile-button">Edit Profile</button>
-      </div>
+<div class="container row panel-alignment">
+  <div class="container col-12 user-img">
+      <img src="{{ user_img }}" class="img-fluid rounded-circle mx-auto d-block" alt="User Profile Picture" style="padding-bottom: 1rem;">
+      <span>
+      <h1 class="display-6 bold text-center accent-color-text"><strong>{{ user_name }}</strong></h1>
+      </span>
   </div>
+  <div class="container col-12 text-center accent-color-text">
+      <p class="leading panel-label">Birthdate:</p>
+      <h1 class="display-6">{{ user_birthdate }}</h1>
+  </div>
+  <div class="container col-12 text-center accent-color-text">
+      <p class="leading panel-label">Today is:</p>
+      <h1 class="display-6">{{ today_date }}</h1>
+  </div>
+  <div class="d-grid gap-2 mx-auto col-12 text-center accent-color-text" style="padding-top: 2rem; padding-bottom: 2rem;" >
+    <button type="button" class="btn btn-primary btn-lg accent-color-text edit-profile-button" data-bs-toggle="modal" data-bs-target="#editUserDetails">Edit Profile</button>
+  </div>
+</div>
+
+<div class="modal fade" id="editUserDetails" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">User details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="/updateDetails/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-body text-center">
+          <img id="frame" src="{{ modal_img }}" class="img-fluid rounded-circle z-depth-2 profile-picture img-thumbnail" alt="User Profile Picture" />
+          <input class="form-control" type="text" id="userId" value="{{ user_id }}" name="userId" hidden>
+          <input class="form-control" type="file" id="formFile" onchange="loadImage()" name="userImage">
+          <script>
+            function loadImage() {
+              frame.src = URL.createObjectURL(event.target.files[0]);
+            }
+          </script>
+          <br>
+          <div class="mb-3 row">
+            <label for="inputUsername" class="col-sm-2">Username</label>
+            <div class="col-sm-10">
+              <input type="text"  class="form-control" id="inputUsername" value="{{ user_name }}" name="userName" >
+            </div>
+          </div>
+  
+          <div class="mb-3 row">
+            <label for="inputBirthdate" class="col-sm-2">Birthdate</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputBirthdate" value="{{ user_birthdate }}" name="userBirthdate">
+            </div>
+          </div>
+        </div>
+  
+        <div class="container overflow-hidden">
+          <div class="row gy-5 text-center">
+            <div class="col-6 ">
+              <button type="button" class="btn btn-secondary cancel-profile-details"
+                data-bs-dismiss="modal">Cancel</button>
+            </div>
+            <div class="col-6">
+              <button type="submit" class="btn btn-primary save-profile-details">Save</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block content-panel %}
-  {% if display_br %}
+{% if display_br %}
     <div class="container-lg">
         <div class="row graph-row">
           <h1 class="display-4 col-12 text-center title-pad"><strong>Today's Biorhythm</strong></h1>
@@ -89,7 +163,7 @@
     </div>
   {% elif display_brfc %}
     <div class="container-lg">
-      <div class="row button-row">
+      <div class="row graph-row">
         <h1 class="display-4 col-12 text-center title-pad"><strong>Biorhythm Forecast</strong></h1>
           <div class="col-12 text-center graph">
             {{ brfc_plot|safe }}
@@ -129,5 +203,9 @@
           </div>
         </div>
     </div>
+
   {% endif %}
+  <br>
+  {% block friendbrmodal %} 
+  {% endblock %}
 {% endblock %}

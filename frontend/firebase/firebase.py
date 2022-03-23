@@ -20,6 +20,7 @@ from .exceptions import InvalidAuthToken
 from .exceptions import NoAuthToken
 
 
+
 cred = credentials.Certificate({
     "type": "service_account",
     "project_id": "biorhythmsytatyr",
@@ -44,32 +45,36 @@ class userDao():
 
         user_ref = db.collection(u'Users').document(id)
         user = user_ref.get().to_dict()
+        user.update({"id": id})
         return user
+    
+    def get_user_by_email(self, email):
+        db = self.db
 
-class FirebaseAuthentication(authentication.BaseAuthentication):
-    def authenticate(self, request):
-        auth_header = request.META.get("HTTP_AUTHORIZATION")
-        if not auth_header:
-            raise NoAuthToken("No auth token provided")
+        user_ref = db.collection(u'Users').where(u'email', u'==', email).stream()
+        for user in user_ref:
+            user_dict = user.to_dict()
+            user_dict.update({"id": user.id})
+            return user_dict
 
-        id_token = auth_header.split(" ").pop()
-        decoded_token = None
-        try:
-            decoded_token = auth.verify_id_token(id_token)
-        except Exception:
-            raise InvalidAuthToken("Invalid auth token")
-            pass
+    def update_user_details(self, id, user_birthdate, user_name, user_img):
+        db = self.db
+        
+        db.collection(u'Users').document(id).update({u'birthday': user_birthdate})
+        db.collection(u'Users').document(id).update({u'username': user_name})
+        db.collection(u'Users').document(id).update({u'profilePicture': user_img})
 
-        if not id_token or not decoded_token:
-            return None
-
-        try:
-            uid = decoded_token.get("uid")
-        except Exception:
-            raise FirebaseError()
-
-        user, created = User.objects.get_or_create(username=uid)
-        user.profile.last_activity = timezone.localtime()
-
-        return (user, None)
-
+    def get_user_friends(self, id):
+        db = self.db
+        friends_ref = db.collection(u'Friends').where(f'userIds', u'array_contains', id).stream()
+        friend_list = []
+        for friends in friends_ref:
+            frds = friends.to_dict()
+            frds = frds['users']
+            del frds[id]
+            for key in frds:
+                name = frds[key]
+                friend_list.append(name)
+        print(friend_list)
+        # return enumerate(friend_list)
+        return friend_list
