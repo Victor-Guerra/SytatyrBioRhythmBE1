@@ -20,8 +20,11 @@ from passlib.hash import django_pbkdf2_sha256
 from datetime import datetime
 from datetime import timedelta
 from .firebase.signup import post_users
-from .firebase.firebase import userDao
+from .firebase.users import userDao
+from .firebase.firebase import init_firebase
 from .firebase.friends import FriendDao
+from .firebase.util import upload_blob
+from .firebase.util import get_blob_image
 import requests
 
 from . import brcalc
@@ -42,38 +45,16 @@ from django.http import Http404
 #from .firebase.firebase import get_user
 from .firebase.events import EventDAO
 
+init_firebase()
+
 
 # PATH for Google Credentials
 myfilepath = settings.BASE_DIR / "frontend/firebase/serviceAccountKey.json"
 def_path = str(path.realpath(myfilepath))
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = def_path
 
-
-# Upload Files to Storage
-def upload_blob(bucket_name, source_file_name, destination_blob_name):
-
-    storage_client = gs.Client()
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(destination_blob_name)
-
-    # Requests the file using the public url
-    r = requests.head(blob.public_url)
-    # Whether the file exists or not on the server
-    fileExists = (r.status_code == requests.codes.ok)
-    fileExists = blob.exists()
-    if fileExists:
-        return 'Image already exists, please change the file name.'
-
-    blob.upload_from_filename(source_file_name)
-
-
-def get_blob_image(picTemplate, bucket_name):
-    storage_client = gs.Client()
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.get_blob(picTemplate)
-    url = blob.generate_signed_url(version="v4", expiration=100, method="GET")
-    return url
-
+# Storage Bucket
+bucket_name = 'biorhythmsytatyr.appspot.com'
 
 class LoginView(View):
 
@@ -102,7 +83,6 @@ class LoginView(View):
 
 class SignupView(View):
     signup_redirect = '/signup'
-    bucket_name = 'biorhythmsytatyr.appspot.com'
 
     def get(self, request):
         template = loader.get_template('frontend/signup.html')
@@ -146,7 +126,7 @@ class SignupView(View):
 
             # Check if the given filename for the profile picture already exists
             # in the google cloud storage
-            if err := upload_blob(self.bucket_name, img_path, profilePicture.name):
+            if err := upload_blob(bucket_name, img_path, profilePicture.name):
                 messages.error(request, err)
                 return redirect(self.signup_redirect)
 
@@ -168,7 +148,6 @@ class BiorhythmView(View):
     display_brfc = False
     br_plot = ""
     brfc_plot = ""
-    bucket_name = 'biorhythmsytatyr.appspot.com'
 
     def get(self, request, user_id=""):
         user = userDao().get_user_by_id(id=user_id)
@@ -197,8 +176,8 @@ class BiorhythmView(View):
 
             context = {
                 'user_id': user_id,
-                'user_img': get_blob_image(user['profilePicture'], self.bucket_name),
-                'modal_img': get_blob_image(user['profilePicture'], self.bucket_name),
+                'user_img': get_blob_image(user['profilePicture'], bucket_name),
+                'modal_img': get_blob_image(user['profilePicture'], bucket_name),
                 'user_birthdate': user_bd.strftime('%d-%m-%Y'),
                 'today_date': hoy.strftime('%d-%m-%Y'),
                 'display_br': self.display_br,
@@ -210,10 +189,6 @@ class BiorhythmView(View):
             return render(request, "frontend/biorhythm/biorhythm.html", context)
         else:
             raise Http404("Invalid User")
-
-
-def schedulerView(request):
-    pass
 
 
 class EventList(View):
@@ -241,7 +216,6 @@ class EventList(View):
             EventDAO().delete_event(event_id=delete_event)
             return redirect('/events/{0}'.format(user_id))
         if add_event:
-            print("SI ENTREEEEEEE")
             received_date = request.POST.get("updateDate")
             new_date = received_date
             if received_date[-4:] == "a.m.":
@@ -287,12 +261,22 @@ class EventList(View):
 
 
 class FriendList(View):
+    br_graph = []
     def get(self, request, user_id=""):
         friends = userDao().get_user_friends(id=user_id)
-
+        
+        for friend in friends: 
+            fuser = userDao().get_user_by_id(friend['id'])
+            friend_bd = datetime.strptime(fuser['birthday'], '%d-%m-%Y')
+            hoy = datetime.today()
+            friend.update({"graph": brcalc.calcBR(friend_bd, hoy)})
+            
+        #print(self.br_graph)
+        
         context = {
             'user_id': user_id,
-            'friends': friends
+            'friends': friends,
+            #'friend_brplot': self.br_graph,
         }
         return render(request, "frontend/friends.html", context)
 
@@ -304,45 +288,13 @@ class FriendList(View):
         friend = userDao().get_user_by_email(email)
 
         friendao = FriendDao()
-        friendao.add_new_friend(user, friend)
+        try:
+            friendao.add_new_friend(user, friend)
+        except TypeError:
+            messages.error(request, 'Not a valid e-mail.')
+            return redirect(f'/contacts/{user_id}')
         return redirect(f'/contacts/{user_id}')
         
-
-
-class FriendBiorhythm(View):
-    # temp fields
-    display_br = False
-    display_brfc = False
-    br_plot = ""
-    brfc_plot = ""
-    friend_brplot = ""
-
-    def get(self, request, user_id=""):
-        # temp get method
-        user = userDao().get_user_by_id(id=user_id)
-        if mv.userValidate.is_valid(user):
-
-            user_bd = datetime.strptime(user['birthday'], '%d-%m-%Y')
-            hoy = datetime.today()
-
-            # needed for ticket
-            self.friend_brplot = brcalc.calcBR(user_bd, hoy)
-
-            context = {
-                'user_id': user_id,
-                'user_img': user['profilePicture'],
-                'user_birthdate': user_bd.strftime('%d-%m-%Y'),
-                'today_date': hoy.strftime('%d-%m-%Y'),
-                'display_br': self.display_br,
-                'display_brfc': self.display_brfc,
-                'br_plot': self.br_plot,
-                'brfc_plot': self.brfc_plot,
-                'friendName': 'obo',
-                'friend_brplot': self.friend_brplot,
-            }
-            return render(request, "frontend/biorhythm/friendbr.html", context)
-        else:
-            raise Http404("Invalid User")
 
 
 def updateUserDetails(request):
@@ -357,7 +309,6 @@ def updateUserDetails(request):
         # If the file already exists, do not save it
         file = fss.save(userImageName, userImage)
 
-    bucket_name = 'biorhythmsytatyr.appspot.com'
     img_path = settings.BASE_DIR / 'media/' / userImageName
     upload_blob(bucket_name, img_path, userImageName)
 
