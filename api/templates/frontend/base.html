@@ -68,7 +68,10 @@
                     </ul>
                   </div>
                     <div class="collapse navbar-collapse col-1" id="navbarDropDown">
-                        <button class="btn my-2 my-sm-0 accent-color-text logout" type="button">Logout</button>
+                      <form action="" method="POST">
+                        {% csrf_token %}
+                        <button class="btn my-2 my-sm-0 accent-color-text logout" type="submit" value="logout" name="logout">Logout</button>
+                      </form>
                     </div>
                 </div>
               </nav>

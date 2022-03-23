@@ -1,3 +1,5 @@
+import email
+from lib2to3.pgen2 import token
 import os
 from django.shortcuts import redirect, render
 from django.template import loader
@@ -27,6 +29,8 @@ from django.template import loader
 from django.http import HttpResponse
 from django.http import Http404
 from .firebase.events import EventDAO
+import requests
+
 
 init_firebase()
 
@@ -40,8 +44,21 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = def_path
 bucket_name = 'biorhythmsytatyr.appspot.com'
 
 class LoginView(View):
-
+    bucket_name = 'biorhythmsytatyr.appspot.com'
     def get(self, request):
+        if request.session.has_key('email'):
+            print("si entro")
+            email = request.session['email']
+            user = userDao().get_user_by_email(email)
+            context = {
+                'user_id': user["id"],
+                'email' : email,
+                'user_img': get_blob_image(user['profilePicture'], self.bucket_name)
+            }
+            if render(request, "frontend/biorhythm/biorhythm.html", context):
+                return redirect(f'/biorhythm/{user["id"]}')         
+
+   
         template = loader.get_template('frontend/login.html')
         context = {
         }
@@ -49,6 +66,7 @@ class LoginView(View):
 
     def post(self, request):
         email = request.POST['email']
+        email_cookie='False'
         password = request.POST['password']
         if email == '' or password == '':
             messages.error(request, 'Provide an email and/or a password')
@@ -56,12 +74,27 @@ class LoginView(View):
         else:
             user, isvalid = get_user_check(email, password)
         if isvalid:
+            email_cookie = email
             print("Logged in successfully")
-            return redirect(f'/biorhythm/{user["id"]}')
+            request.session['email'] = email_cookie
+            context = {
+                'user_id': user["id"],
+                'email' : email_cookie,
+                'user_img': get_blob_image(user['profilePicture'], self.bucket_name)
+            }
+            if render(request, "frontend/biorhythm/biorhythm.html", context):
+                return redirect(f'/biorhythm/{user["id"]}')            
+            
         else:
             print("Invalid Passwords")
+            context = {
+                'user_id': user["id"],
+                'email' : email_cookie,
+            }
+            request.session['email'] = email_cookie
             messages.error(request, 'Invalid Credentials, please try again')
-            return redirect('/')
+            return render(request, "frontend/login.html", context)
+           # return redirect('/')
 
 
 class SignupView(View):
@@ -113,6 +146,7 @@ class SignupView(View):
                 messages.error(request, err)
                 return redirect(self.signup_redirect)
 
+          
             # Encrypt password
             enc_password = django_pbkdf2_sha256.encrypt(
                 password, rounds=12000, salt_size=32)
@@ -133,6 +167,10 @@ class BiorhythmView(View):
     brfc_plot = ""
 
     def get(self, request, user_id=""):
+
+        if not request.session.has_key('email'):
+            return render(request,'frontend/login.html')
+
         user = userDao().get_user_by_id(id=user_id)
         if mv.userValidate.is_valid(user):
 
@@ -156,7 +194,6 @@ class BiorhythmView(View):
             else:
                 self.display_br = False
                 self.display_brfc = False
-
             context = {
                 'user_id': user_id,
                 'user_img': get_blob_image(user['profilePicture'], bucket_name),
@@ -173,10 +210,24 @@ class BiorhythmView(View):
         else:
             raise Http404("Invalid User")
 
+    def post(self, request, user_id=""):
+        logout = request.POST.get("logout")
+        if logout: 
+            try:
+                del request.session['email']
+            except:
+                pass
+            if render(request, "frontend/login.html"):
+                return redirect('/')
+
 
 class EventList(View):
 
     def get(self, request, user_id=""):
+
+        if not request.session.has_key('email'):
+            return render(request,'frontend/login.html')
+
         events = EventDAO().get_user_events(user_id=user_id)
         for event in events:
             date1 = datetime.fromtimestamp(int(event.get('date')))
@@ -195,6 +246,16 @@ class EventList(View):
         delete_event = request.POST.get("delete-event")
         update_event = request.POST.get("update-event")
         add_event = request.POST.get("add-event")
+
+        logout = request.POST.get("logout")
+        if logout: 
+            try:
+                del request.session['email']
+            except:
+                pass
+            if render(request, "frontend/login.html"):
+                return redirect('/')
+                
         if delete_event:
             EventDAO().delete_event(event_id=delete_event)
             return redirect(f'/events/{user_id}')
@@ -246,6 +307,10 @@ class EventList(View):
 class FriendList(View):
     br_graph = []
     def get(self, request, user_id=""):
+
+        if not request.session.has_key('email'):
+            return render(request,'frontend/login.html')
+
         friends = userDao().get_user_friends(id=user_id)
         
         for friend in friends: 
@@ -264,6 +329,15 @@ class FriendList(View):
         return render(request, "frontend/friends.html", context)
 
     def post(self, request, user_id=""):
+
+        logout = request.POST.get("logout")
+        if logout: 
+            try:
+                del request.session['email']
+            except:
+                pass
+            if render(request, "frontend/login.html"):
+                return redirect('/')
         email = request.POST['useremail']
         user_id = request.POST['user_id']
 
@@ -279,6 +353,53 @@ class FriendList(View):
         return redirect(f'/contacts/{user_id}')
         
 
+class FriendBiorhythm(View):
+    # temp fields
+    display_br = False
+    display_brfc = False
+    br_plot = ""
+    brfc_plot = ""
+    friend_brplot = ""
+
+    def get(self, request, user_id=""):
+        # temp get method
+
+        if not request.session.has_key('email'):
+            return render(request,'frontend/login.html')
+
+        user = userDao().get_user_by_id(id=user_id)
+        if mv.userValidate.is_valid(user):
+
+            user_bd = datetime.strptime(user['birthday'], '%d-%m-%Y')
+            hoy = datetime.today()
+
+            # needed for ticket
+            self.friend_brplot = brcalc.calcBR(user_bd, hoy)
+
+            context = {
+                'user_id': user_id,
+                'user_img': user['profilePicture'],
+                'user_birthdate': user_bd.strftime('%d-%m-%Y'),
+                'today_date': hoy.strftime('%d-%m-%Y'),
+                'display_br': self.display_br,
+                'display_brfc': self.display_brfc,
+                'br_plot': self.br_plot,
+                'brfc_plot': self.brfc_plot,
+                'friendName': 'obo',
+                'friend_brplot': self.friend_brplot,
+            }
+            return render(request, "frontend/biorhythm/friendbr.html", context)
+        else:
+            raise Http404("Invalid User")
+    def post(self, request, user_id=""):
+        logout = request.POST.get("logout")
+        if logout: 
+            try:
+                del request.session['email']
+            except:
+                pass
+            if render(request, "frontend/login.html"):
+                return redirect('/')
 
 def updateUserDetails(request):
     userImage = request.FILES['userImage']
@@ -297,4 +418,3 @@ def updateUserDetails(request):
 
     userDao().update_user_details(userId, userBirthdate, userName, userImageName)
     return redirect('/biorhythm/{userId}')
-# Create your views here.

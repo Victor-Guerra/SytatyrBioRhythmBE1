@@ -12,3 +12,4 @@ def get_user_check(email,password):
         userMap = user.to_dict()
         userMap.update({"id":user.id})
         return (userMap,django_pbkdf2_sha256.verify(password, userMap["password"]))
+

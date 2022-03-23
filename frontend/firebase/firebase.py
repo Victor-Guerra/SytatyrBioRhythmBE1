@@ -2,6 +2,23 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 from .. import models
+from firebase_admin import auth
+
+import os
+
+import firebase_admin
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.utils import timezone
+from firebase_admin import auth
+from firebase_admin import credentials
+from rest_framework import authentication
+from rest_framework import exceptions
+
+from .exceptions import FirebaseError
+from .exceptions import InvalidAuthToken
+from .exceptions import NoAuthToken
+
 
 def init_firebase():
     cred = credentials.Certificate({
