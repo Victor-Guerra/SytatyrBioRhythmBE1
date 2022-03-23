@@ -8,7 +8,6 @@ urlpatterns = [
     path('', views.LoginView.as_view(), name='login'),
     path('signup/', views.SignupView.as_view(), name='signup'),
     path('biorhythm/<user_id>', views.BiorhythmView.as_view(), name='biorhythm'),
-    path('biorhythm/friend/<user_id>',views.FriendBiorhythm.as_view(), name='friendbiorhythm'),
     path('contacts/<user_id>', views.FriendList.as_view(), name='contacts'),
     path('events/<user_id>', views.EventList.as_view(), name='events'),
     path('updateDetails/', views.updateUserDetails, name='updateUserDetails'),

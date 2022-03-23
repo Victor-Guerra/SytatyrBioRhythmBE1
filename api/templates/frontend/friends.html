@@ -9,10 +9,32 @@
     background-color: #98DFAF !important; 
 }
 .photo-signup{
-    max-height: 15rem !important;
-    max-width: 15rem !important;
+    max-height: 9rem !important;
+    max-width: 9rem !important;
     border-radius: 50% !important;
-    }
+    padding: 5% !important;
+}
+.friendbr-modal {
+  width: 50% !important;
+  max-width: 100% !important;
+  min-width: 50% !important;
+}
+.graph-row {
+  height: 100% !important;
+}
+.friend-row {
+  height: 100% !important;
+}
+.friend-row-name {
+  size: 3rem !important;
+}
+.friend-name {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+.friend-li {
+  max-height: 10rem !important;
+}
 {% endblock %} 
 
 {% block page-content %}
@@ -21,26 +43,68 @@
     class="row col-md-3 col-sm-12 justify-content-left"
     style="margin-bottom: 2rem"
   >
+    
     <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#addFriendModal" >Add Contact</button>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert-login">
+      <div class="alert alert-danger " role="alert">
+        {{ message }}
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
   </div>
 
   <div class="row min-vh-100 max-vh-70">
     <ul class="list-group">
       {% for friend in friends %}
-      <li class="container list-group-item">
+      <li class="container list-group-item friend-li">
         <div class="row justify-content-between">
-          <div class="col-5">
-              <div class="row" >
-                  <div class="col-4">
-                    <img id="frame" src="{{friend.profilePicture}}" class="rounded-circle z-depth-2 photo-signup" />
+          <div class="col-9">
+              <div class="row friend-row" >
+                  <div class="col-3 justify-text">
+                    <img id="frame" src="{{friend.profilePicture}}" class="rounded-circle d-block z-depth-2 photo-signup" />
                   </div>
-                  <div class="col">{{friend.username}}</div>
+                  <div class="col-9 friend-row-name">
+                    <p class="display-4 friend-name"> {{friend.username}} </p>
+                  </div>
               </div>
           </div>
-          <div class="col-2">
-            <button type="button" class="btn btn-outline-primary">
+          <div class="col-3">
+            <button type="submit" class="btn btn-outline-primary col-12">
                 {% bs_icon 'check2' %} Friend
             </button>
+              <button name="calculatebr" value="{{friend.id}}" type="" class="btn col-12 btn-outline-primary" style="visibility: hidden">
+                  {% bs_icon 'bezier' %} Get their Biorhythm
+              </button>
+            <button  type="button" class="btn btn-primary col-12" data-bs-toggle="modal" data-bs-target="#friendBRModal-{{friend.username}}">
+                {% bs_icon 'egg-fried' %} See their Biorhythm
+            </button>
+
+            <div class="modal fade" id="friendBRModal-{{friend.username}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="friendBR" aria-hidden="true">
+                <div class="modal-dialog friendbr-modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="friendBR">{{ friend.username }}'s Biorhythm</h3>
+                            <button type="button"  class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-lg">
+                                <div class="row graph-row">
+                                  <h1 class="display-4 col-12 text-center title-pad"><strong>Today's Biorhythm</strong></h1>
+                                  <div class="col-12 text-center graph">
+                                     {{ friend.graph|safe }} 
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"> Close </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
           </div>
         </div>
       </li>
