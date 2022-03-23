@@ -1,6 +1,7 @@
 import firebase_admin
 from firebase_admin import firestore
 
+
 class EventDAO():
     def __init__(self):
         self.db = firestore.client()
@@ -10,8 +11,10 @@ class EventDAO():
         user_ref = db.collection(u'Users').document(user_id)
         user = user_ref.get().to_dict()
         user_email = user['email']
-        events = db.collection(u'Events').where(u'owner.email', u'==', u"{0}".format(user_email)).stream()
-        participant_events = db.collection(u'Events').where(u'participants', u'array_contains', u"{0}".format(user_email)).stream()
+        events = db.collection(u'Events').where(
+            u'owner.email', u'==', u"{0}".format(user_email)).stream()
+        participant_events = db.collection(u'Events').where(
+            u'participants', u'array_contains', u"{0}".format(user_email)).stream()
 
         eventsList = []
         for event in events:
@@ -32,4 +35,19 @@ class EventDAO():
 
     def update_event(self, event_id, date, description, name, participants):
         db = self.db
-        db.collection(u'Events').document(event_id).update({'date': date, 'name': name, 'description': description, 'participants': participants})
+        db.collection(u'Events').document(event_id).update(
+            {'date': date, 'name': name, 'description': description, 'participants': participants})
+
+    def create_event(self, event_id, date, description, name, participants, user):
+        db = self.db
+        db.collection(u'Events').add({
+            'date': date,
+            'name': name,
+            'owner': {
+                'id': user['id'],
+                'username': user['username'],
+                'email': user['email'],
+            },
+            'description': description,
+            'participants': participants
+        })

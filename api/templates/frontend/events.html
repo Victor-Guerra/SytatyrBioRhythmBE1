@@ -12,7 +12,7 @@ background-color: #98DFAF !important;
 {% block page-content %}
 <div class="row gx-10">
     <div class="container col-md-1 gap-2" style="margin-left: 2rem !important;">
-        <button type="button" class="btn btn-primary btn-lg">Add event</button>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#create-event-modal" class="btn btn-primary btn-lg">Add event</button>
     </div>
     <div class="container col-10 content-panel  min-vh-100 max-vh-70" style="padding: 2rem !important">
         <div class="list-group">
@@ -143,5 +143,40 @@ background-color: #98DFAF !important;
             {% endfor %}
         </div>
     </div>
+    <div class="modal fade" id="create-event-modal" aria-hidden="true" aria-labelledby="create-event-modal"
+                tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateModalToggleLabel">Create New Event</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form class="back-button" action="" method="POST">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="date-text" class="col-form-label">Date:</label>
+                                    <input id="inputDate" class="form-control"  name="updateDate">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="title-text" class="col-form-label">Title:</label>
+                                    <input id="inputTitle" class="form-control"  name="updateName">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description-text" class="col-form-label">Description:</label>
+                                    <input id="inputDescription" class="form-control" name="updateDescription">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="participants-text" class="col-form-label">Participants:</label>
+                                    <input id="inputParticipants" class="form-control" name="updateParticipants">
+                                </div>
+                                <button type="submit" name="add-event" value="true" class="btn btn-primary">Create</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 </div>
 {% endblock %}
