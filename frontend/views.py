@@ -185,6 +185,9 @@ class BiorhythmView(View):
 
     def get(self, request, user_id=""):
 
+        if not request.session.has_key('email'):
+            return render(request,'frontend/login.html')
+
         user = userDao().get_user_by_id(id=user_id)
         if mv.userValidate.is_valid(user):
 
@@ -226,7 +229,6 @@ class BiorhythmView(View):
 
     def post(self, request, user_id=""):
         logout = request.POST.get("logout")
-        print(logout)
         if logout: 
             try:
                 del request.session['email']
@@ -243,6 +245,10 @@ def schedulerView(request):
 class EventList(View):
 
     def get(self, request, user_id=""):
+
+        if not request.session.has_key('email'):
+            return render(request,'frontend/login.html')
+
         events = EventDAO().get_user_events(user_id=user_id)
         for event in events:
             date1 = datetime.fromtimestamp(int(event.get('date')))
@@ -261,6 +267,16 @@ class EventList(View):
         delete_event = request.POST.get("delete-event")
         update_event = request.POST.get("update-event")
         add_event = request.POST.get("add-event")
+
+        logout = request.POST.get("logout")
+        if logout: 
+            try:
+                del request.session['email']
+            except:
+                pass
+            if render(request, "frontend/login.html"):
+                return redirect('/')
+                
         if delete_event:
             EventDAO().delete_event(event_id=delete_event)
             return redirect(f'/events/{user_id}')
@@ -311,6 +327,10 @@ class EventList(View):
 
 class FriendList(View):
     def get(self, request, user_id=""):
+
+        if not request.session.has_key('email'):
+            return render(request,'frontend/login.html')
+
         friends = userDao().get_user_friends(id=user_id)
 
         context = {
@@ -320,6 +340,15 @@ class FriendList(View):
         return render(request, "frontend/friends.html", context)
 
     def post(self, request, user_id=""):
+
+        logout = request.POST.get("logout")
+        if logout: 
+            try:
+                del request.session['email']
+            except:
+                pass
+            if render(request, "frontend/login.html"):
+                return redirect('/')
         email = request.POST['useremail']
         user_id = request.POST['user_id']
 
@@ -342,6 +371,10 @@ class FriendBiorhythm(View):
 
     def get(self, request, user_id=""):
         # temp get method
+
+        if not request.session.has_key('email'):
+            return render(request,'frontend/login.html')
+
         user = userDao().get_user_by_id(id=user_id)
         if mv.userValidate.is_valid(user):
 
@@ -366,6 +399,15 @@ class FriendBiorhythm(View):
             return render(request, "frontend/biorhythm/friendbr.html", context)
         else:
             raise Http404("Invalid User")
+    def post(self, request, user_id=""):
+        logout = request.POST.get("logout")
+        if logout: 
+            try:
+                del request.session['email']
+            except:
+                pass
+            if render(request, "frontend/login.html"):
+                return redirect('/')
 
 
 def updateUserDetails(request):
