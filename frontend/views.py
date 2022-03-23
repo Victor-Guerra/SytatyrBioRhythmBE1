@@ -236,12 +236,35 @@ class EventList(View):
     def post(self, request, user_id=""):
         delete_event = request.POST.get("delete-event")
         update_event = request.POST.get("update-event")
+        add_event = request.POST.get("add-event")
         if delete_event:
             EventDAO().delete_event(event_id=delete_event)
             return redirect('/events/{0}'.format(user_id))
+        if add_event:
+            print("SI ENTREEEEEEE")
+            received_date = request.POST.get("updateDate")
+            new_date = received_date
+            if received_date[-4:] == "a.m.":
+                new_date = received_date.replace("a.m.", "am")
+            elif received_date[-4:] == "p.m.":
+                new_date = received_date.replace("p.m.", "pm")
+            elif received_date[-2:] == "AM":
+                new_date = received_date.replace("AM", "am")
+            elif received_date[-2:] == "PM":
+                new_date = received_date.replace("PM", "pm")
+            datetime_object = datetime.strptime(new_date, "%B %d, %Y, %I:%M %p")
+            converted_date = datetime.timestamp(datetime_object)
+            received_name = request.POST.get("updateName")
+            received_description = request.POST.get("updateDescription")
+            received_participants = request.POST.get("updateParticipants")
+            separated_participants = received_participants.split(", ")
+            user = userDao().get_user_by_id(user_id)
+            EventDAO().create_event(event_id=update_event, date=converted_date, name=received_name,
+                                    description=received_description, participants=separated_participants, user=user)
+            return redirect(f'/events/{user_id}')
         if update_event:
             received_date = request.POST.get("updateDate")
-            new_date = ""
+            new_date = received_date
             if received_date[-4:] == "a.m.":
                 new_date = received_date.replace("a.m.", "am")
             elif received_date[-4:] == "p.m.":
