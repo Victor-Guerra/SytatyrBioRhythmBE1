@@ -29,6 +29,7 @@ class userDao():
 
         user_ref = db.collection(u'Users').document(id)
         user = user_ref.get().to_dict()
+        user.update({"id": id})
         return user
     
     def get_user_by_email(self, email):
@@ -46,3 +47,19 @@ class userDao():
         db.collection(u'Users').document(id).update({u'birthday': user_birthdate})
         db.collection(u'Users').document(id).update({u'username': user_name})
         db.collection(u'Users').document(id).update({u'profilePicture': user_img})
+
+    def get_user_friends(self, id):
+        db = self.db
+        friends_ref = db.collection(u'Friends').where(f'userIds', u'array_contains', id).stream()
+
+        friend_list = []
+        for friends in friends_ref:
+            frds = friends.to_dict()
+            frds = frds['users']
+            del frds[id]
+            for key in frds:
+                name = frds[key]
+                friend_list.append(name)
+        print(friend_list)
+        # return enumerate(friend_list)
+        return friend_list
