@@ -1,45 +1,26 @@
 import os
-from sqlite3 import Timestamp
 from django.shortcuts import redirect, render
 from django.template import loader
 from django.http import HttpResponse
 from django.http import Http404
-import numpy
-from rsa import encrypt
 from .firebase.login import get_user_check
 from django.contrib import messages
 from django.views import View
 from django.conf import settings
-from django.core.files.storage import default_storage
 from django.core.files.storage import FileSystemStorage
 from google.cloud import storage as gs
-from pathlib import Path
 from os import path
-from firebase_admin import storage
 from passlib.hash import django_pbkdf2_sha256
 from datetime import datetime
-from datetime import timedelta
 from .firebase.signup import post_users
 from .firebase.firebase import userDao
 from .firebase.friends import FriendDao
-import requests
-
 from . import brcalc
 from . import modelvalidate as mv
-
-from cmath import pi
-import enum
-#import datetime
-import re
-import time
-from unicodedata import name
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 from django.template import loader
 from django.http import HttpResponse
 from django.http import Http404
-#from .firebase.firebase import init_firebase
-#from .firebase.firebase import create_user
-#from .firebase.firebase import get_user
 from .firebase.events import EventDAO
 
 
@@ -239,9 +220,8 @@ class EventList(View):
         add_event = request.POST.get("add-event")
         if delete_event:
             EventDAO().delete_event(event_id=delete_event)
-            return redirect('/events/{0}'.format(user_id))
+            return redirect(f'/events/{user_id}')
         if add_event:
-            print("SI ENTREEEEEEE")
             received_date = request.POST.get("updateDate")
             new_date = received_date
             if received_date[-4:] == "a.m.":
@@ -281,7 +261,7 @@ class EventList(View):
             separated_participants = received_participants.split(", ")
             EventDAO().update_event(event_id=update_event, date=converted_date, name=received_name,
                                     description=received_description, participants=separated_participants)
-            return redirect('/events/{0}'.format(user_id))
+            return redirect('/events/{user_id}')
 
     
 
@@ -362,5 +342,5 @@ def updateUserDetails(request):
     upload_blob(bucket_name, img_path, userImageName)
 
     userDao().update_user_details(userId, userBirthdate, userName, userImageName)
-    return redirect('/biorhythm/{0}'.format(userId))
+    return redirect('/biorhythm/{userId}')
 # Create your views here.
