@@ -1,3 +1,4 @@
+from traceback import print_tb
 from firebase_admin import firestore
 from .util import get_blob_image
 
@@ -12,6 +13,7 @@ class userDao():
 
         user_ref = db.collection(u'Users').document(id)
         user = user_ref.get().to_dict()
+        print(id)
         user.update({"id": id})
         return user
     

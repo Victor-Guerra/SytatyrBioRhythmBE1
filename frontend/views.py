@@ -417,4 +417,4 @@ def updateUserDetails(request):
     upload_blob(bucket_name, img_path, userImageName)
 
     userDao().update_user_details(userId, userBirthdate, userName, userImageName)
-    return redirect('/biorhythm/{userId}')
+    return redirect(f'/biorhythm/{userId}')
