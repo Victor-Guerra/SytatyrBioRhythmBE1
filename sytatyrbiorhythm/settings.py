@@ -34,7 +34,9 @@ SECRET_KEY = 'django-insecure-!x7eow)**m$=k*jmrkg2=8r@4*+!nz)46^txk-=k_prcqa_ah(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'sytatyr-bio-rhythm.herokuapp.com',
+]
 
 # Application definition
 
