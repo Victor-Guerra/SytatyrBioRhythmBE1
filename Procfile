@@ -1,1 +1,1 @@
-web: gunicorn sytatyrbiorhythm.wsgi.application
+web: gunicorn sytatyrbiorhythm.wsgi
