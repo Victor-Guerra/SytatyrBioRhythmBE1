@@ -225,6 +225,15 @@ class EventList(View):
 
     def get(self, request, user_id=""):
 
+        logout = request.GET.get("logout")
+        if logout: 
+            try:
+                del request.session['email']
+            except:
+                pass
+            if render(request, "frontend/login.html"):
+                return redirect('/')
+
         if not request.session.has_key('email'):
             return render(request,'frontend/login.html')
 
