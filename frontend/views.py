@@ -299,7 +299,7 @@ class EventList(View):
             separated_participants = received_participants.split(", ")
             EventDAO().update_event(event_id=update_event, date=converted_date, name=received_name,
                                     description=received_description, participants=separated_participants)
-            return redirect('/events/{user_id}')
+            return redirect(f'/events/{user_id}')
 
     
 

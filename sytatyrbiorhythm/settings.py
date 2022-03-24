@@ -36,6 +36,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'sytatyr-bio-rhythm.herokuapp.com',
+    '127.0.0.1'
 ]
 
 # Application definition
